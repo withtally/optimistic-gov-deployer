@@ -110,9 +110,6 @@ devDependencies:
   solidity-coverage:
     specifier: ^0.8.5
     version: 0.8.5(hardhat@2.19.2)
-  tally-merkle-tree:
-    specifier: ^1.0.5
-    version: 1.0.5
   ts-generator:
     specifier: ^0.1.1
     version: 0.1.1
@@ -1379,6 +1376,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     dev: true
     bundledDependencies:
       - napi-wasm
@@ -9204,6 +9202,10 @@ packages:
     resolution: {integrity: sha512-hmEVtAGYzVQpCKdbQea4skABsdXW4RUh5t5mJ2zzqowJS2OyXZTU1KhDVFhx+NlWZ4ap9mqR9TcDO3LTTttd+g==}
     dev: true
 
+  /napi-wasm@1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+    dev: true
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
@@ -11529,13 +11531,6 @@ packages:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
-    dev: true
-
-  /tally-merkle-tree@1.0.5:
-    resolution: {integrity: sha512-rVDa7NjLwBaK79QvpOGsPq6nvkt6kqaVDrPZa1vpLXC9AK49J1TAqbQ0vxXTF1oPx/YjxgneFWw4Unu12XjhIA==}
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      ethereum-cryptography: 1.2.0
     dev: true
 
   /tape@4.17.0:
