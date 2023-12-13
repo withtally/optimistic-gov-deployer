@@ -15,6 +15,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	const [deployerSigner] = await hre.ethers.getSigners();
 	const deployer = await deployerSigner.getAddress();
 
+	const minter = deployer
 	// HARDHAT LOG
 	console.log(
 		`network:\x1B[36m${hre.network.name}\x1B[37m`,
@@ -47,7 +48,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	console.log("token symbol:\x1B[36m", config.token.symbol, "\x1B[37m");
 	console.log("default admin:\x1B[33m", admin_address, "\x1B[37m");
 	console.log("pauser:\x1B[33m", admin_address, "\x1B[37m");
-	console.log("minter:\x1B[33m", admin_address, "\x1B[37m\n");
+	console.log("minter:\x1B[33m", minter, "\x1B[37m\n");
 	
 
 	let token:DeployResult;
@@ -58,7 +59,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-	if( config.vetoGovernor.clockMode ){
+	if( config.clockMode ){
 		token = await deploy("GovernorToken", {
 			from: deployer,
 			contract: "contracts/clock/GovernorToken.sol:GovernorToken",
@@ -71,7 +72,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 				// if minter is not deployer no one will be able to mint, 
 				// after all you can only propose and vote while having tokens, 
 				// so no one would be able to execute or propose anything in this governance.
-				deployer,
+				minter,
 			],
 			log: true,
 		});
@@ -88,7 +89,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 				// if minter is not deployer no one will be able to mint, 
 				// after all you can only propose and vote while having tokens, 
 				// so no one would be able to execute or propose anything in this governance.
-				deployer,
+				minter,
 			],
 			log: true,
 		});
@@ -243,6 +244,82 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		`${new Date()}\nToken contract deployed at: ${governor.address}` +
 		` - ${hre.network.name} - block number: ${govBlock?.number}\n${verify_str}\n\n`
 	);
+	//////////// 
+	const minterNFT = deployer
+
+	// NFT CONTRACT
+	// INFO LOGS
+	console.log("NFT ARGS");
+	console.log("token name:\x1B[36m", config.nft.name, "\x1B[37m");
+	console.log("token symbol:\x1B[36m", config.nft.symbol, "\x1B[37m");
+	console.log("default admin:\x1B[33m", admin_address, "\x1B[37m");
+	console.log("pauser:\x1B[33m", admin_address, "\x1B[37m");
+	console.log("minter:\x1B[33m", minterNFT, "\x1B[37m\n");
+	
+
+	let nft:DeployResult;
+	/*  
+		string memory _name,
+		string memory _symbol,
+		address defaultAdmin,
+		address pauser,
+		address minter
+	*/
+	if( config.clockMode ){
+		token = await deploy("GovernorNFT", {
+			from: deployer,
+			contract: "contracts/clock/GovernorNFT.sol:GovernorNFT",
+			args: [
+				config.nft.name,
+				config.nft.symbol,
+				// Admin adress is pointing to the governance contract
+				admin_address,
+				admin_address,
+				// if minter is not deployer no one will be able to mint, 
+				// after all you can only propose and vote while having tokens, 
+				// so no one would be able to execute or propose anything in this governance.
+				minterNFT,
+			],
+			log: true,
+		});
+	} else {
+		token = await deploy("GovernorNFT", {
+			from: deployer,
+			contract: "contracts/GovernorNFT.sol:GovernorNFT",
+			args: [
+				config.nft.name,
+				config.nft.symbol,
+				// Admin adress is pointing to the governance contract
+				admin_address,
+				admin_address,
+				// if minter is not deployer no one will be able to mint, 
+				// after all you can only propose and vote while having tokens, 
+				// so no one would be able to execute or propose anything in this governance.
+				minterNFT,
+			],
+			log: true,
+		});
+	}
+
+	// const tdBlock = token.
+	const nftBlock = await hre.ethers.provider.getBlock("latest");
+
+	console.log(`\nToken contract: `, token.address);
+	// verify cli
+	 verify_str =
+		`npx hardhat verify ` +
+		`--network ${hre.network.name} ` +
+		`${token_address} "${config.token.name}" "${config.token.symbol}" ${admin_address} ${admin_address} ${admin_address}`
+	console.log("\n" + verify_str+"\n");
+
+	// save it to a file to make sure the user doesn't lose it.
+	fs.appendFileSync(
+		"contracts.out",
+		`${new Date()}\nToken contract deployed at: ${await token.address}` +
+		` - ${hre.network.name} - block number: ${nftBlock?.number}\n${verify_str}\n\n`
+	);
+
+
 
 	// ending line
 	fs.appendFileSync(

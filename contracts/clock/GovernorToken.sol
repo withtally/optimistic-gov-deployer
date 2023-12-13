@@ -100,7 +100,7 @@ contract GovernorToken is ERC20, ERC20Burnable, ERC20Pausable, AccessControl, ER
         return super.nonces(owner);
     }
 
-      /**
+    /**
      * @dev Returns the current timestamp as a `uint48`.
      * @return The current timestamp.
      */

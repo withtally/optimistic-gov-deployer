@@ -104,4 +104,29 @@ contract GovernorNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausab
     {
         return super.supportsInterface(interfaceId);
     }
+
+    /**
+     * @dev Returns the current timestamp as a `uint48`.
+     * @return The current timestamp.
+     */
+    function clock() 
+        public 
+        view 
+        override 
+        returns (uint48) {
+        return uint48(block.timestamp);
+    }
+
+    /**
+     * @dev Returns the clock mode as a string.
+     * @return The clock mode.
+     */
+    function CLOCK_MODE()
+        public
+        view
+        virtual
+        override
+        returns (string memory) {
+        return "mode=timestamp";
+    }
 }

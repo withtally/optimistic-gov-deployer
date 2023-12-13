@@ -5,10 +5,14 @@ export const config:any ={
   token:{
     name: "VETOERS TOKEN",
     symbol: "VT",
+    // if empty the role of minter will be given to deployer address.
+    minter: "",
   },
   nft:{
     name: "Optimistic Yacth Club",
     symbol: "OYC",
+    // if empty the role of minter will be given to deployer address.
+    minter: "",
   },
   // Timelock
   timelock:{
@@ -25,8 +29,6 @@ export const config:any ={
     quorumNumerator: 30,
     // threshold to be able to propose
     proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
-    // true set clockMode as timestamp, false is block
-    clockMode: false,
     // vote extension, if a late quorum is reached how much you want to extend it ?
     voteExtension: 7200, // 7200 would be a day.
   },
@@ -41,12 +43,12 @@ export const config:any ={
     quorumNumerator: 4,
     // threshold to be able to propose
     proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
-    // true set clockMode as timestamp, false is block
-    clockMode: false,
     // vote extension, if a late quorum is reached how much you want to extend it ?
     // 10 hours.
     voteExtension: 3000,
   },
+  // true set clockMode as timestamp, false is block
+  clockMode: false,
   // First Mint is used to mint the first tokens to this governance
   // it has to be higher than the proposalThreshold
   // so it is enough tokens to the governance to be able to propose
