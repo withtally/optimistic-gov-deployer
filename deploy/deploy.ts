@@ -64,7 +64,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			// Admin adress is pointing to the governance contract
 			admin_address,
 			admin_address,
-			// if minter is not deployer no one will be able to mint, 
+			// if minter is not deployer or an EOA no one will be able to mint, 
 			// after all you can only propose and vote while having tokens, 
 			// so no one would be able to execute or propose anything in this governance.
 			minter,
