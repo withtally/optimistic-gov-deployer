@@ -6,7 +6,7 @@ import { getExpectedContractAddress } from '../helpers/expected_contract';
 import fs from "fs";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-	console.log("\x1B[37mDeploying Open Zepellin Governance contracts");
+	console.log("\x1B[37mDeploying Optismitic Governance contracts");
 
 	// DEPLOY
 	const { deploy } = hre.deployments;
@@ -25,6 +25,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	const governance_address = await getExpectedContractAddress(deployerSigner, 2);
 	const timelock_address = await getExpectedContractAddress(deployerSigner, 1);
 	const token_address = await getExpectedContractAddress(deployerSigner, 0);
+	const nft_address = await getExpectedContractAddress(deployerSigner, 3);
+	const vetoer_address = await getExpectedContractAddress(deployerSigner, 4);
 
 	const admin_address = governance_address;
 	
@@ -32,13 +34,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	console.log("Future contract addresses")
 	console.log("Token contract addresses:\x1B[33m",token_address,"\x1B[37m")
 	console.log("Governance contract address:\x1B[33m",governance_address,"\x1B[37m")
-	console.log("Timelock contract address:\x1B[33m",timelock_address,"\x1B[37m\n")
+	console.log("Timelock contract address:\x1B[33m",timelock_address,"\x1B[37m")
+	console.log("NFT contract address:\x1B[33m",nft_address,"\x1B[37m")
+	console.log("Vetoer contract address:\x1B[33m",vetoer_address,"\x1B[37m\n")
 	
-	console.log("ClockMode will use ", config.clockMode ? "timestamp" : "block number", " as time unit\n")
+	console.log("ClockMode will use ", config.vetoGovernor.clockMode ? "timestamp" : "block number", " as time unit\n")
 
 	// TOKEN CONTRACT
 	// INFO LOGS
-	console.log("TOKEN ARGS");
+	console.log("VETOR TOKEN ARGS");
 	console.log("token name:\x1B[36m", config.token.name, "\x1B[37m");
 	console.log("token symbol:\x1B[36m", config.token.symbol, "\x1B[37m");
 	console.log("default admin:\x1B[33m", admin_address, "\x1B[37m");
@@ -54,7 +58,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-	if( config.clockMode ){
+	if( config.vetoGovernor.clockMode ){
 		token = await deploy("GovernorToken", {
 			from: deployer,
 			contract: "contracts/clock/GovernorToken.sol:GovernorToken",
@@ -108,13 +112,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		`${new Date()}\nToken contract deployed at: ${await token.address}` +
 		` - ${hre.network.name} - block number: ${tdBlock?.number}\n${verify_str}\n\n`
 	);
-	
+
+	const executors = [admin_address,timelock_address,vetoer_address];
+	const proposers = [admin_address,timelock_address,vetoer_address];
 	// TIMELOCK CONTRACT
 	// INFO LOGS
 	console.log("TIMELOCK ARGS");
 	console.log("timelock min delay:\x1B[36m", config.timelock.minDelay, "\x1B[37m");
-	console.log("executors:\x1B[33m", JSON.stringify([admin_address,timelock_address]), "\x1B[37m");
-	console.log("proposers:\x1B[33m", JSON.stringify([admin_address,timelock_address]), "\x1B[37m");
+	console.log("executors:\x1B[33m", JSON.stringify(executors), "\x1B[37m");
+	console.log("proposers:\x1B[33m", JSON.stringify(proposers), "\x1B[37m");
 	console.log("admin:\x1B[33m", timelock_address, "\x1B[37m\n");
 
 	/*  
@@ -129,8 +135,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		args: [
 			config.timelock.minDelay,
 			// Admin adress is pointing to the governance contract
-			[admin_address,timelock_address],
-			[admin_address,timelock_address],
+			proposers,
+			executors,
 			timelock_address,
 		],
 		log: true,
@@ -139,9 +145,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	const timelockBlock = await hre.ethers.provider.getBlock("latest");
 
 	console.log(`\nTimelock contract: `, timelock.address);
-
-	const proposers = [timelock_address];
-	const executors = [timelock_address];
 
 	fs.appendFileSync(
 		`arguments_${timelock.address}.js`,
@@ -189,7 +192,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         uint256 _quorumNumeratorValue,
 	*/
 	let governor:DeployResult;
-	if( config.clockMode ){
+	if( config.vetoGovernor.clockMode ){
 		governor = await deploy("OZGovernor", {
 			from: deployer,
 			contract: "contracts/clock/OZGovernor.sol:OZGovernor",
