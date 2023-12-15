@@ -191,23 +191,25 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		*/
 		let governor: DeployResult;
 		const args = [
-			config.governor.name,
-			nft_address,
+			config.vetoGovernor.name,
+			token_address,
 			timelock_address,
-			config.governor.votingDelay,
-			config.governor.votingPeriod,
-			config.governor.proposalThreshold,
-			config.governor.quorumNumerator,
-			config.governor.superQuorumThreshold,
-			config.governor.voteExtension
+			config.vetoGovernor.votingDelay,
+			config.vetoGovernor.votingPeriod,
+			config.vetoGovernor.proposalThreshold,
+			config.vetoGovernor.quorumNumerator,
+			config.vetoGovernor.superQuorumThreshold,
+			config.vetoGovernor.voteExtension
 
 		]
+		const gasLimit = 5000000; // Example gas limit, adjust as needed
 
 		governor = await deploy("VetoGovernor", {
 			from: deployer,
 			contract: config.clockMode ? "contracts/clock/VetoGovernor.sol:VetoGovernor" : "contracts/VetoGovernor.sol:VetoGovernor",
 			args: args,
-			log: true,
+			log: false,
+			gasLimit: gasLimit, // Adding the gasLimit here
 		});
 
 		const govBlock = await hre.ethers.provider.getBlock("latest");
