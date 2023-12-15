@@ -197,9 +197,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.vetoGovernor.voteExtension,
 		]
 
-		governor = await deploy("OZGovernor", {
+		governor = await deploy("VetoGovernor", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/OZGovernor.sol:OZGovernor" : "contracts/OZGovernor.sol:OZGovernor",
+			contract: config.clockMode ? "contracts/clock/VetoGovernor.sol:VetoGovernor" : "contracts/VetoGovernor.sol:VetoGovernor",
 			args: args,
 			log: true,
 		});
@@ -316,9 +316,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.quorumNumerator,
 			config.governor.voteExtension
 		]
-		governor = await deploy("GovernorCouncil", {
+		governor = await deploy("OZGovernor", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/GovernorCouncil.sol:GovernorCouncil" : "contracts/GovernorCouncil.sol:GovernorCouncil",
+			contract: config.clockMode ? "contracts/clock/OZGovernor.sol:OZGovernor" : "contracts/OZGovernor.sol:OZGovernor",
 			args: args,
 			log: true,
 		});
