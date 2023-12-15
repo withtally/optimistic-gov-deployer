@@ -286,7 +286,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 		// GOVERNOR CONTRACT
 		// INFO LOGS
-		console.log("VETOER GOVERNOR ARGS");
+		console.log("SUPER GOVERNOR ARGS");
 		console.log("name:\x1B[36m", config.governor.name, "\x1B[37m");
 		console.log("Token contract addresses:\x1B[33m", token_address, "\x1B[37m")
 		console.log("Timelock contract address:\x1B[33m", timelock_address, "\x1B[37m")
@@ -316,9 +316,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.quorumNumerator,
 			config.governor.voteExtension
 		]
-		governor = await deploy("OZGovernor", {
+		governor = await deploy("GovernorCouncil", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/OZGovernor.sol:OZGovernor" : "contracts/OZGovernor.sol:OZGovernor",
+			contract: config.clockMode ? "contracts/clock/GovernorCouncil.sol:GovernorCouncil" : "contracts/GovernorCouncil.sol:GovernorCouncil",
 			args: args,
 			log: true,
 		});

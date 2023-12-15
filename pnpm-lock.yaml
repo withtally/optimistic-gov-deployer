@@ -14,6 +14,9 @@ dependencies:
   eslint-plugin-promise:
     specifier: ^6.1.1
     version: 6.1.1(eslint@8.55.0)
+  tally-superquorum:
+    specifier: 1.0.1
+    version: 1.0.1
 
 devDependencies:
   '@nomicfoundation/hardhat-chai-matchers':
@@ -1004,6 +1007,10 @@ packages:
   /@openzeppelin/contracts@5.0.0:
     resolution: {integrity: sha512-bv2sdS6LKqVVMLI5+zqnNrNU/CA+6z6CmwFXm/MzmOPBRSO5reEJN7z0Gbzvs0/bv/MZZXNklubpwy3v2+azsw==}
     dev: true
+
+  /@openzeppelin/contracts@5.0.1:
+    resolution: {integrity: sha512-yQJaT5HDp9hYOOp4jTYxMsR02gdFZFXhewX5HW9Jo4fsqSVqqyIO/xTHdWDaKX5a3pv1txmf076Lziz+sO7L1w==}
+    dev: false
 
   /@pkgr/utils@2.4.2:
     resolution: {integrity: sha512-POgTXhjrTfbTV63DiFXav4lBHiICLKKwDeaKn9Nphwj7WH6m0hMMCaJkMyRWjgtPFyRKRVoMXXjczsTQRDEhYw==}
@@ -5138,6 +5145,12 @@ packages:
       string-width: 4.2.3
       strip-ansi: 6.0.1
     dev: true
+
+  /tally-superquorum@1.0.1:
+    resolution: {integrity: sha512-ezPw0Z3REd+bkl1dcR0z1obW0MmNFWETPtP4eAY7Q1zEsXehkl8gHck/e5ckTMWlQDt4EFes/5fwUK0nh8A2+A==}
+    dependencies:
+      '@openzeppelin/contracts': 5.0.1
+    dev: false
 
   /text-table@0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
