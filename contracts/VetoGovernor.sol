@@ -13,11 +13,11 @@ import "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.
 import "tally-superquorum/contracts/extension/GovernorVotesSuperQuorumFraction.sol";
 
 /**
- * @title GovernorVetoer
- * @dev GovernorVetoer is a smart contract that extends OpenZeppelin's Governor with additional features
+ * @title VetoGovernor
+ * @dev VetoGovernor is a smart contract that extends OpenZeppelin's Governor with additional features
  * for voting, timelock, and quorum.
  */
-contract GovernorVetoer is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
+contract VetoGovernor is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
     
     /**
      * @dev Initializes the OZGovernor contract.

@@ -250,6 +250,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OZGovernor__factory>;
     getContractFactory(
+      name: "GovernorVetoer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorVetoer__factory>;
+    getContractFactory(
       name: "GovernorNFT",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GovernorNFT__factory>;
@@ -265,6 +269,14 @@ declare module "hardhat/types/runtime" {
       name: "TimelockController",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TimelockController__factory>;
+    getContractFactory(
+      name: "VetoGovernor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.VetoGovernor__factory>;
+    getContractFactory(
+      name: "GovernorVotesSuperQuorumFraction",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.GovernorVotesSuperQuorumFraction__factory>;
 
     getContractAt(
       name: "AccessControl",
@@ -562,6 +574,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.OZGovernor>;
     getContractAt(
+      name: "GovernorVetoer",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorVetoer>;
+    getContractAt(
       name: "GovernorNFT",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -581,6 +598,16 @@ declare module "hardhat/types/runtime" {
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.TimelockController>;
+    getContractAt(
+      name: "VetoGovernor",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.VetoGovernor>;
+    getContractAt(
+      name: "GovernorVotesSuperQuorumFraction",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.GovernorVotesSuperQuorumFraction>;
 
     deployContract(
       name: "AccessControl",
@@ -819,6 +846,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OZGovernor>;
     deployContract(
+      name: "GovernorVetoer",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.GovernorVetoer>;
+    deployContract(
       name: "GovernorNFT",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.GovernorNFT>;
@@ -834,6 +865,14 @@ declare module "hardhat/types/runtime" {
       name: "TimelockController",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.TimelockController>;
+    deployContract(
+      name: "VetoGovernor",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VetoGovernor>;
+    deployContract(
+      name: "GovernorVotesSuperQuorumFraction",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.GovernorVotesSuperQuorumFraction>;
 
     deployContract(
       name: "AccessControl",
@@ -1131,6 +1170,11 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OZGovernor>;
     deployContract(
+      name: "GovernorVetoer",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.GovernorVetoer>;
+    deployContract(
       name: "GovernorNFT",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -1150,6 +1194,16 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.TimelockController>;
+    deployContract(
+      name: "VetoGovernor",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.VetoGovernor>;
+    deployContract(
+      name: "GovernorVotesSuperQuorumFraction",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.GovernorVotesSuperQuorumFraction>;
 
     // default types
     getContractFactory(

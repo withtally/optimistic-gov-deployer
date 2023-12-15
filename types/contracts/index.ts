@@ -7,3 +7,4 @@ export type { GovernorNFT } from "./GovernorNFT";
 export type { GovernorToken } from "./GovernorToken";
 export type { OZGovernor } from "./OZGovernor";
 export type { TimelockController } from "./TimelockController";
+export type { VetoGovernor } from "./VetoGovernor";

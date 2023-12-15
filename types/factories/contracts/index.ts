@@ -6,3 +6,4 @@ export { GovernorNFT__factory } from "./GovernorNFT__factory";
 export { GovernorToken__factory } from "./GovernorToken__factory";
 export { OZGovernor__factory } from "./OZGovernor__factory";
 export { TimelockController__factory } from "./TimelockController__factory";
+export { VetoGovernor__factory } from "./VetoGovernor__factory";

@@ -31,6 +31,7 @@ export const config:any ={
     proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
     // vote extension, if a late quorum is reached how much you want to extend it ?
     voteExtension: 7200, // 7200 would be a day.
+    superQuorumThreshold: 50. // 50% of the total supply
   },
   // Governor
   vetoGovernor:{

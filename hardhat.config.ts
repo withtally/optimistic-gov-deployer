@@ -24,6 +24,7 @@ const config: HardhatUserConfig = {
             // Not including the metadata hash
             bytecodeHash: "none",
           },
+          viaIR: true,
           // Disable the optimizer when debugging
           optimizer: {
             enabled: true,

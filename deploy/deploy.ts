@@ -174,7 +174,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		console.log("voting period:\x1B[36m", config.vetoGovernor.votingPeriod, "\x1B[37m");
 		console.log("proposal threshold period:\x1B[36m", config.vetoGovernor.proposalThreshold, "\x1B[37m");
 		console.log("quorum numerator:\x1B[36m", config.vetoGovernor.quorumNumerator, "\x1B[37m");
+		console.log("super quorum threshold:\x1B[36m", config.vetoGovernor.superQuorumThreshold, "\x1B[37m");
 		console.log("vote extension:\x1B[36m", config.vetoGovernor.voteExtension, "\x1B[37m\n");
+
 
 		/*  
 			string memory _name,
@@ -184,17 +186,21 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			uint32 _initialVotingPeriod,
 			uint256 _initialProposalThreshold,
 			uint256 _quorumNumeratorValue,
+			uint256 _superQuorumThreshold,     
+	        uint48 _initialVoteExtension
 		*/
 		let governor: DeployResult;
 		const args = [
-			config.vetoGovernor.name,
-			token_address,
+			config.governor.name,
+			nft_address,
 			timelock_address,
-			config.vetoGovernor.votingDelay,
-			config.vetoGovernor.votingPeriod,
-			config.vetoGovernor.proposalThreshold,
-			config.vetoGovernor.quorumNumerator,
-			config.vetoGovernor.voteExtension,
+			config.governor.votingDelay,
+			config.governor.votingPeriod,
+			config.governor.proposalThreshold,
+			config.governor.quorumNumerator,
+			config.governor.superQuorumThreshold,
+			config.governor.voteExtension
+
 		]
 
 		governor = await deploy("VetoGovernor", {
@@ -286,7 +292,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 		// GOVERNOR CONTRACT
 		// INFO LOGS
-		console.log("SUPER GOVERNOR ARGS");
+		console.log("NFT GOVERNOR ARGS");
 		console.log("name:\x1B[36m", config.governor.name, "\x1B[37m");
 		console.log("Token contract addresses:\x1B[33m", token_address, "\x1B[37m")
 		console.log("Timelock contract address:\x1B[33m", timelock_address, "\x1B[37m")
@@ -304,6 +310,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			uint32 _initialVotingPeriod,
 			uint256 _initialProposalThreshold,
 			uint256 _quorumNumeratorValue,
+	        uint48 _initialVoteExtension
 		*/
 		let governor: DeployResult;
 		const args = [
@@ -315,6 +322,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.proposalThreshold,
 			config.governor.quorumNumerator,
 			config.governor.voteExtension
+
 		]
 		governor = await deploy("OZGovernor", {
 			from: deployer,
