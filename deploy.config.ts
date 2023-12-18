@@ -1,54 +1,48 @@
-
-export const config:any ={
+export const config:any = {
   // Configuration for the deployment
   // Change the values for a more personalized deployment
-  token:{
+  token: {
     name: "VETOERS TOKEN",
     symbol: "VT",
-    // if empty the role of minter will be given to deployer address.
-    minter: "",
   },
-  nft:{
-    name: "Optimistic Yacth Club",
+  nft: {
+    name: "Optimistic Yacht Club",
     symbol: "OYC",
-    // if empty the role of minter will be given to deployer address.
-    minter: "",
   },
   // Timelock
-  timelock:{
+  timelock: {
     minDelay: 86400, // 12 days
   },
   // Governor
-  governor:{
+  governor: {
     name: "OPTIMISTIC GROUP",
-    // 7200 1 day
+    // 7200 1 day, 
     votingDelay: 7200,
-    // 50400 7 days
+    // 50400 7 days( assuming a block is 12 seconds)
     votingPeriod: 50400,
-    // numerator to denominator of 100
+    // Quorum numerator (percentage of total supply needed for quorum)
     quorumNumerator: 30,
-    // threshold to be able to propose
-    proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
-    // vote extension, if a late quorum is reached how much you want to extend it ?
-    voteExtension: 7200, // 7200 would be a day.
-    superQuorumThreshold: 50. // 50% of the total supply
+    // Threshold for proposing (set to a non-zero value to prevent proposal spam)
+    proposalThreshold: 0,
+    // Vote extension duration in seconds
+    voteExtension: 7200, // 7200 is 2 hours
+    superQuorumThreshold: 50, // 50% of the total supply
   },
-  // Governor
-  vetoGovernor:{
+  // Veto Governor
+  vetoGovernor: {
     name: "VETOERS DAO",
-    // 5 hours
+    // 1500 is  5 hours (assuming block is 12 second)
     votingDelay: 1500,
-    // 7200 1 day
+    // 7200 1 day, ( assuming a block is 12 seconds)
     votingPeriod: 7200,
-    // numerator to denominator of 100
+    // Quorum numerator (percentage of total supply needed for quorum)
     quorumNumerator: 4,
-    // threshold to be able to propose
-    proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
-    // vote extension, if a late quorum is reached how much you want to extend it ?
-    // 10 hours.
-    voteExtension: 3000,
-    superQuorumThreshold: 50. // 50% of the total supply
+    // Threshold for proposing (set to a non-zero value to prevent proposal spam)
+    proposalThreshold: 0,
+    // Vote extension duration in seconds
+    voteExtension: 3000, // 3000 is 10 hours.
+    superQuorumThreshold: 50, // 50% of the total supply
   },
-  // true set clockMode as timestamp, false is block
+  // Set clockMode to true for timestamp mode, false for block number mode
   clockMode: false,
 }
