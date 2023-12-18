@@ -1,24 +1,23 @@
 import { DeployFunction, DeployResult } from "hardhat-deploy/types";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 
-import { config } from "../deploy.config"
+import { config } from "../deploy.config";
 import { getExpectedContractAddress } from '../helpers/expected_contract';
 import fs from "fs";
 
 /**
- * @description Deploys the Governor, Timelock and Token contracts, it will output a contracts.out file you can verify everything after deployment.
+ * @description Deploys the Governor, Timelock, and Token contracts. It will output a contracts.out file so you can verify everything after deployment.
  */
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-	console.log("\x1B[37mDeploying Optismitic Governance contracts");
+	console.log("\x1B[37mDeploying Optimistic Governance contracts");
 
 	// DEPLOY
 	const { deploy } = hre.deployments;
 
-	// const signer = await hre.ethers.getSigner()
 	const [deployerSigner] = await hre.ethers.getSigners();
 	const deployer = await deployerSigner.getAddress();
 
-	const minter = deployer
+	const minter = deployer;
 	// HARDHAT LOG
 	console.log(
 		`network:\x1B[36m${hre.network.name}\x1B[37m`,
@@ -26,7 +25,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 	);
 
 	// Load values for constructor from a ts file deploy.config.ts
-	// if you change the order of the instant invoked functions with deployers inside, you also have to change the numbers here in the expectedCotnractAddress
+	// If you change the order of the instantly invoked functions with deployers inside, you also have to change the numbers here in the expectedContractAddress
 	const token_address = await getExpectedContractAddress(deployerSigner, 0);
 	const timelock_address = await getExpectedContractAddress(deployerSigner, 1);
 	const governance_address = await getExpectedContractAddress(deployerSigner, 2);
@@ -35,21 +34,21 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 	const admin_address = governance_address;
 
-	console.log("Future contract addresses")
-	console.log("Token contract addresses:\x1B[33m", token_address, "\x1B[37m")
-	console.log("Governance contract address:\x1B[33m", governance_address, "\x1B[37m")
-	console.log("Timelock contract address:\x1B[33m", timelock_address, "\x1B[37m")
-	console.log("NFT contract address:\x1B[33m", nft_address, "\x1B[37m")
-	console.log("Vetoer contract address:\x1B[33m", vetoer_address, "\x1B[37m\n")
+	console.log("Future contract addresses");
+	console.log("Token contract addresses:\x1B[33m", token_address, "\x1B[37m");
+	console.log("Governance contract address:\x1B[33m", governance_address, "\x1B[37m");
+	console.log("Timelock contract address:\x1B[33m", timelock_address, "\x1B[37m");
+	console.log("NFT contract address:\x1B[33m", nft_address, "\x1B[37m");
+	console.log("Vetoer contract address:\x1B[33m", vetoer_address, "\x1B[37m\n");
 
-	console.log("ClockMode will use ", config.clockMode ? "timestamp" : "block number", " as time unit\n")
+	console.log("ClockMode will use ", config.clockMode ? "timestamp" : "block number", " as the time unit\n");
 
 	//// deploy token
 	await (async function deployToken() {
 
 		// TOKEN CONTRACT
 		// INFO LOGS
-		console.log("VETOR TOKEN ARGS");
+		console.log("VETOER TOKEN ARGS");
 		console.log("token name:\x1B[36m", config.token.name, "\x1B[37m");
 		console.log("token symbol:\x1B[36m", config.token.symbol, "\x1B[37m");
 		console.log("default admin:\x1B[33m", admin_address, "\x1B[37m");
@@ -57,14 +56,15 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		console.log("minter:\x1B[33m", minter, "\x1B[37m\n");
 
 
+
 		let token: DeployResult;
 		const args = [
 			config.token.name,
 			config.token.symbol,
-			// Admin adress is pointing to the governance contract
+			// Admin Address is pointing to the governance contract
 			admin_address,
 			admin_address,
-			// if minter is not deployer or an EOA no one will be able to mint, 
+			// If the minter is neither the deployer nor an EOA, no one will be able to mint,
 			// after all you can only propose and vote while having tokens, 
 			// so no one would be able to execute or propose anything in this governance.
 			minter,
@@ -83,7 +83,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			log: true,
 		});
 
-		// const tdBlock = token.
+
 		const tdBlock = await hre.ethers.provider.getBlock("latest");
 
 		console.log(`\nToken contract: `, token.address);
@@ -101,7 +101,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			` - ${hre.network.name} - block number: ${tdBlock?.number}\n${verify_str}\n\n`
 		);
 	})();
-	
+
 	//// deploy timelock
 	await (async function deployTimelock() {
 
@@ -126,7 +126,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			contract: "contracts/TimelockController.sol:TimelockController",
 			args: [
 				config.timelock.minDelay,
-				// Admin adress is pointing to the governance contract
+				// Admin Address is pointing to the governance contract
 				proposers,
 				executors,
 				timelock_address,
@@ -154,7 +154,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			`${timelock.address}\n`;
 		console.log("\n" + verify_str_timelock);
 
-		// save it to a file to make sure the user doesn't lose it.
+		// Save it to a file to make sure the user doesn't lose it.
 		fs.appendFileSync(
 			"contracts.out",
 			`${new Date()}\nTimelock contract deployed at: ${await timelock.address
@@ -189,7 +189,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			uint256 _initialProposalThreshold,
 			uint256 _quorumNumeratorValue,
 			uint256 _superQuorumThreshold,     
-	        uint48 _initialVoteExtension
+			uint48 _initialVoteExtension
 		*/
 		let governor: DeployResult;
 		const args = [
@@ -251,12 +251,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		const args = [
 			config.nft.name,
 			config.nft.symbol,
-			// Admin adress is pointing to the governance contract
+			// Admin Address is pointing to the governance contract
 			admin_address,
 			admin_address,
 			// if minter is not deployer no one will be able to mint, 
-			// after all you can only propose and vote while having tokens, 
-			// so no one would be able to execute or propose anything in this governance.
+			// After all, you can only propose and vote while having tokens, 
+			// so no one would be able to execute or propose anything in this governance system.
 			minterNFT,
 		]
 		/*  
@@ -273,7 +273,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			log: true,
 		});
 
-		// const tdBlock = token.
+
 		const nftBlock = await hre.ethers.provider.getBlock("latest");
 
 		console.log(`\nNFT contract: `, nft.address);
@@ -315,7 +315,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			uint32 _initialVotingPeriod,
 			uint256 _initialProposalThreshold,
 			uint256 _quorumNumeratorValue,
-	        uint48 _initialVoteExtension
+			uint48 _initialVoteExtension
 		*/
 		let governor: DeployResult;
 		const args = [
@@ -361,9 +361,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		"\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" +
 		"\n\n"
 	);
+
 };
 
-func.id = "deploy_governor_optimistic"; // id required to prevent reexecution
+func.id = "deploy_governor_optimistic"; // id required to prevent re-execution
 func.tags = ["ERC20", "ERC721", "GOVERNOR", "TIMELOCK", "VETOER"];
 
 export default func;
