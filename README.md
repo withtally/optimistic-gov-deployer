@@ -1,15 +1,18 @@
-## Optimistic Governance: Empowering Faster DAOs with Tally
+Certainly! I'll adjust the formatting to use Markdown headers for titles and subtitles. Here's the revised README:
 
-**Theme image for repository: resources/banner.png**
+---
 
-**# Streamline Your DAO with Optimistic Governance**
+# 🌐 Optimistic Governance: Empowering Faster DAOs with Tally
+
+**Theme Image for Repository: resources/banner.png**
+
+## 🚀 Streamline Your DAO with Optimistic Governance
 
 Welcome to the future of DAO governance! This repository empowers you to implement Optimistic Governance, a powerful framework designed to expedite decision-making and streamline your DAO's operations.
 
-Launch a Optimistic Governance with Tally:** [[https://docs.tally.xyz/premium-features/optimistic-governance](https://docs.tally.xyz/premium-features/optimistic-governance)]
+**Launch an Optimistic Governance with Tally:** [[Tally Docs](https://docs.tally.xyz/premium-features/optimistic-governance)]
 
-
-## ⚡ What is Optimistic Governance?
+### ⚡ What is Optimistic Governance?
 
 Imagine a DAO where trusted members, the **Optimistic Council**, propose changes and swiftly enact them. Yet, the broader community retains control through a **veto mechanism**. This enables:
 
@@ -17,7 +20,7 @@ Imagine a DAO where trusted members, the **Optimistic Council**, propose changes
 * **Community control:** Veto power ensures proposals align with your DAO's vision and values.
 * **Reduced bureaucracy:** Streamlined processes minimize overhead, keeping your DAO lean and efficient.
 
-##  How does it work?
+### 🛠 How Does it Work?
 
 Optimistic Governance leverages a combination of battle-tested smart contracts:
 
@@ -27,24 +30,23 @@ Optimistic Governance leverages a combination of battle-tested smart contracts:
 * **Veto Governor:** Allows the community to challenge and potentially veto proposals.
 * **Timelock:** Holds DAO assets and ensures proposals undergo a review period before execution.
 
-To know more about contracts check up our [docs](https://docs.tally.xyz)
+To know more about contracts check our [docs](https://docs.tally.xyz).
 
-Want to deploy your DAO with Tally, we also have [premium features](https://docs.tally.xyz/premium-features).
+Want to deploy your DAO with Tally? We also have [premium features](https://docs.tally.xyz/premium-features).
 
-## 🧐 Using it with Tally
+### 🧐 Using it with Tally
 
-If you want a normal Governance, you can use this [repo](https://github.com/withtally/gov_deployer)
+If you want a normal Governance, you can use this [repo](https://github.com/withtally/gov_deployer).
 
-0. Fill `.env` file and install the repo as explained in [instalation](#installation)
-1. Remember to fill use the configs for your DAO, you can find it in `deploy.config.ts`
-2. Deploy the contracts using the [deploy method](#deploying).
-5. Validate your contract as explained [here](#validating-contract).
-6. You will also have to mint and share tokens to members of your DAO
-7. Remember to remove yourself as minter from the token when finished with task 6
-7. Enter in contact with [Tally!](mailto:biz@tally.xyz) 
+1. Fill `.env` file and install the repo as explained in [installation](#installation).
+2. Remember to use the configs for your DAO, which can be found in `deploy.config.ts`.
+3. Deploy the contracts using the [deploy method](#deploying).
+4. Validate your contract as explained [here](#validating-contract).
+5. You will also have to mint and share tokens to members of your DAO.
+6. Remember to remove yourself as minter from the token when finished with task 5.
+7. Enter in contact with [Tally](mailto:biz@tally.xyz).
 
-
-## 💻 Getting Started
+### 💻 Getting Started
 
 #### Installation
 
@@ -57,7 +59,7 @@ cp .env.example .env
 # npx hardhat vars set INFURA_API_KEY
 ```
 
-Some other commands
+Some other commands:
 
 ```bash
 pnpm clean
@@ -84,9 +86,10 @@ pnpm deployc
 ```
 
 #### Validating Contract
+
 After running the script to deploy the contract, it will print the command lines needed to validate each contract in your terminal. 
 
-But to run those contracts you must have provided your Etherscan ( or other scan ) to the API KEY in the `.env` file, you can use it to validate the contracts.
+But to run those commands, you must have provided your Etherscan (or other scan) API KEY in the `.env` file. You can use it to validate the contracts.
 
 Example output:
 
@@ -101,22 +104,20 @@ OZ Governor contract:  0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9
 npx hardhat verify --network hardhat 0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9 "EXAMPLE GROUP" 0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512 7200 50400 0 30 7200
 ```
 
-----------
 
-### Testing
+### 🧪 Testing
 
 To run the tests:
 
 ```bash
 pnpm test
 ```
-
 ----------
 
-## 🚨 Disclaimer
+### 🚨 Disclaimer
 
 Tally is not responsible for funds or contracts deployed with this tool. It is intended for internal testing & reference purposes only.
 
-## 🤝 Contributions
+### 🤝 Contributions
 
 Contributions are welcome! Refer to the [contributing guidelines](CONTRIBUTING.md) to get started.
