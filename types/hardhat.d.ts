@@ -238,41 +238,41 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DoubleEndedQueue__factory>;
     getContractFactory(
-      name: "GovernorNFT",
+      name: "ERC20Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GovernorNFT__factory>;
+    ): Promise<Contracts.ERC20Token__factory>;
     getContractFactory(
-      name: "GovernorToken",
+      name: "ERC721Token",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GovernorToken__factory>;
+    ): Promise<Contracts.ERC721Token__factory>;
+    getContractFactory(
+      name: "OZGovernor",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OZGovernor__factory>;
+    getContractFactory(
+      name: "OzGovernorSuperQuorum",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OzGovernorSuperQuorum__factory>;
+    getContractFactory(
+      name: "ERC20Token",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC20Token__factory>;
+    getContractFactory(
+      name: "ERC721Token",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC721Token__factory>;
     getContractFactory(
       name: "OZGovernor",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OZGovernor__factory>;
     getContractFactory(
-      name: "GovernorVetoer",
+      name: "OzGovernorSuperQuorum",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GovernorVetoer__factory>;
-    getContractFactory(
-      name: "GovernorNFT",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GovernorNFT__factory>;
-    getContractFactory(
-      name: "GovernorToken",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GovernorToken__factory>;
-    getContractFactory(
-      name: "OZGovernor",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.OZGovernor__factory>;
+    ): Promise<Contracts.OzGovernorSuperQuorum__factory>;
     getContractFactory(
       name: "TimelockController",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.TimelockController__factory>;
-    getContractFactory(
-      name: "VetoGovernor",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.VetoGovernor__factory>;
     getContractFactory(
       name: "GovernorVotesSuperQuorumFraction",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -559,50 +559,50 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.DoubleEndedQueue>;
     getContractAt(
-      name: "GovernorNFT",
+      name: "ERC20Token",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.GovernorNFT>;
+    ): Promise<Contracts.ERC20Token>;
     getContractAt(
-      name: "GovernorToken",
+      name: "ERC721Token",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.GovernorToken>;
+    ): Promise<Contracts.ERC721Token>;
+    getContractAt(
+      name: "OZGovernor",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OZGovernor>;
+    getContractAt(
+      name: "OzGovernorSuperQuorum",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
+    getContractAt(
+      name: "ERC20Token",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC20Token>;
+    getContractAt(
+      name: "ERC721Token",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ERC721Token>;
     getContractAt(
       name: "OZGovernor",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.OZGovernor>;
     getContractAt(
-      name: "GovernorVetoer",
+      name: "OzGovernorSuperQuorum",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
-    ): Promise<Contracts.GovernorVetoer>;
-    getContractAt(
-      name: "GovernorNFT",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.GovernorNFT>;
-    getContractAt(
-      name: "GovernorToken",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.GovernorToken>;
-    getContractAt(
-      name: "OZGovernor",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.OZGovernor>;
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
     getContractAt(
       name: "TimelockController",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.TimelockController>;
-    getContractAt(
-      name: "VetoGovernor",
-      address: string | ethers.Addressable,
-      signer?: ethers.Signer
-    ): Promise<Contracts.VetoGovernor>;
     getContractAt(
       name: "GovernorVotesSuperQuorumFraction",
       address: string | ethers.Addressable,
@@ -834,41 +834,41 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.DoubleEndedQueue>;
     deployContract(
-      name: "GovernorNFT",
+      name: "ERC20Token",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorNFT>;
+    ): Promise<Contracts.ERC20Token>;
     deployContract(
-      name: "GovernorToken",
+      name: "ERC721Token",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorToken>;
+    ): Promise<Contracts.ERC721Token>;
+    deployContract(
+      name: "OZGovernor",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OZGovernor>;
+    deployContract(
+      name: "OzGovernorSuperQuorum",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
+    deployContract(
+      name: "ERC20Token",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ERC20Token>;
+    deployContract(
+      name: "ERC721Token",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ERC721Token>;
     deployContract(
       name: "OZGovernor",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OZGovernor>;
     deployContract(
-      name: "GovernorVetoer",
+      name: "OzGovernorSuperQuorum",
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorVetoer>;
-    deployContract(
-      name: "GovernorNFT",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorNFT>;
-    deployContract(
-      name: "GovernorToken",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorToken>;
-    deployContract(
-      name: "OZGovernor",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.OZGovernor>;
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
     deployContract(
       name: "TimelockController",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.TimelockController>;
-    deployContract(
-      name: "VetoGovernor",
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VetoGovernor>;
     deployContract(
       name: "GovernorVotesSuperQuorumFraction",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -1155,50 +1155,50 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.DoubleEndedQueue>;
     deployContract(
-      name: "GovernorNFT",
+      name: "ERC20Token",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorNFT>;
+    ): Promise<Contracts.ERC20Token>;
     deployContract(
-      name: "GovernorToken",
+      name: "ERC721Token",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorToken>;
+    ): Promise<Contracts.ERC721Token>;
+    deployContract(
+      name: "OZGovernor",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OZGovernor>;
+    deployContract(
+      name: "OzGovernorSuperQuorum",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
+    deployContract(
+      name: "ERC20Token",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ERC20Token>;
+    deployContract(
+      name: "ERC721Token",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ERC721Token>;
     deployContract(
       name: "OZGovernor",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.OZGovernor>;
     deployContract(
-      name: "GovernorVetoer",
+      name: "OzGovernorSuperQuorum",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorVetoer>;
-    deployContract(
-      name: "GovernorNFT",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorNFT>;
-    deployContract(
-      name: "GovernorToken",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.GovernorToken>;
-    deployContract(
-      name: "OZGovernor",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.OZGovernor>;
+    ): Promise<Contracts.OzGovernorSuperQuorum>;
     deployContract(
       name: "TimelockController",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.TimelockController>;
-    deployContract(
-      name: "VetoGovernor",
-      args: any[],
-      signerOrOptions?: ethers.Signer | DeployContractOptions
-    ): Promise<Contracts.VetoGovernor>;
     deployContract(
       name: "GovernorVotesSuperQuorumFraction",
       args: any[],

@@ -21,9 +21,9 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../../../common";
+} from "../common";
 
-export interface GovernorVetoerInterface extends Interface {
+export interface OzGovernorSuperQuorumInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "BALLOT_TYPEHASH"
@@ -74,16 +74,11 @@ export interface GovernorVetoerInterface extends Interface {
       | "setVotingDelay"
       | "setVotingPeriod"
       | "state"
-      | "superQuorum"
-      | "superQuorumDenominator"
-      | "superQuorumNumerator()"
-      | "superQuorumNumerator(uint256)"
       | "supportsInterface"
       | "timelock"
       | "token"
       | "updateQuorumNumerator"
       | "updateTimelock"
-      | "updatesuperQuorumNumerator"
       | "version"
       | "votingDelay"
       | "votingPeriod"
@@ -100,7 +95,6 @@ export interface GovernorVetoerInterface extends Interface {
       | "ProposalQueued"
       | "ProposalThresholdSet"
       | "QuorumNumeratorUpdated"
-      | "SuperQuorumNumeratorUpdated"
       | "TimelockChange"
       | "VoteCast"
       | "VoteCastWithParams"
@@ -302,22 +296,6 @@ export interface GovernorVetoerInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "state", values: [BigNumberish]): string;
   encodeFunctionData(
-    functionFragment: "superQuorum",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "superQuorumDenominator",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "superQuorumNumerator()",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "superQuorumNumerator(uint256)",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -330,10 +308,6 @@ export interface GovernorVetoerInterface extends Interface {
   encodeFunctionData(
     functionFragment: "updateTimelock",
     values: [AddressLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "updatesuperQuorumNumerator",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
   encodeFunctionData(
@@ -505,22 +479,6 @@ export interface GovernorVetoerInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "state", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "superQuorum",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "superQuorumDenominator",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "superQuorumNumerator()",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "superQuorumNumerator(uint256)",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
@@ -532,10 +490,6 @@ export interface GovernorVetoerInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "updateTimelock",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "updatesuperQuorumNumerator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
@@ -709,25 +663,6 @@ export namespace QuorumNumeratorUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace SuperQuorumNumeratorUpdatedEvent {
-  export type InputTuple = [
-    oldQuorumNumerator: BigNumberish,
-    newQuorumNumerator: BigNumberish
-  ];
-  export type OutputTuple = [
-    oldQuorumNumerator: bigint,
-    newQuorumNumerator: bigint
-  ];
-  export interface OutputObject {
-    oldQuorumNumerator: bigint;
-    newQuorumNumerator: bigint;
-  }
-  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
-  export type Filter = TypedDeferredTopicFilter<Event>;
-  export type Log = TypedEventLog<Event>;
-  export type LogDescription = TypedLogDescription<Event>;
-}
-
 export namespace TimelockChangeEvent {
   export type InputTuple = [oldTimelock: AddressLike, newTimelock: AddressLike];
   export type OutputTuple = [oldTimelock: string, newTimelock: string];
@@ -832,11 +767,11 @@ export namespace VotingPeriodSetEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface GovernorVetoer extends BaseContract {
-  connect(runner?: ContractRunner | null): GovernorVetoer;
+export interface OzGovernorSuperQuorum extends BaseContract {
+  connect(runner?: ContractRunner | null): OzGovernorSuperQuorum;
   waitForDeployment(): Promise<this>;
 
-  interface: GovernorVetoerInterface;
+  interface: OzGovernorSuperQuorumInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
@@ -1177,18 +1112,6 @@ export interface GovernorVetoer extends BaseContract {
 
   state: TypedContractMethod<[proposalId: BigNumberish], [bigint], "view">;
 
-  superQuorum: TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
-
-  superQuorumDenominator: TypedContractMethod<[], [bigint], "view">;
-
-  "superQuorumNumerator()": TypedContractMethod<[], [bigint], "view">;
-
-  "superQuorumNumerator(uint256)": TypedContractMethod<
-    [timepoint: BigNumberish],
-    [bigint],
-    "view"
-  >;
-
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
@@ -1207,12 +1130,6 @@ export interface GovernorVetoer extends BaseContract {
 
   updateTimelock: TypedContractMethod<
     [newTimelock: AddressLike],
-    [void],
-    "nonpayable"
-  >;
-
-  updatesuperQuorumNumerator: TypedContractMethod<
-    [newQuorumNumerator: BigNumberish],
     [void],
     "nonpayable"
   >;
@@ -1534,18 +1451,6 @@ export interface GovernorVetoer extends BaseContract {
     nameOrSignature: "state"
   ): TypedContractMethod<[proposalId: BigNumberish], [bigint], "view">;
   getFunction(
-    nameOrSignature: "superQuorum"
-  ): TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "superQuorumDenominator"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "superQuorumNumerator()"
-  ): TypedContractMethod<[], [bigint], "view">;
-  getFunction(
-    nameOrSignature: "superQuorumNumerator(uint256)"
-  ): TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
-  getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
   getFunction(
@@ -1564,13 +1469,6 @@ export interface GovernorVetoer extends BaseContract {
   getFunction(
     nameOrSignature: "updateTimelock"
   ): TypedContractMethod<[newTimelock: AddressLike], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "updatesuperQuorumNumerator"
-  ): TypedContractMethod<
-    [newQuorumNumerator: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
   getFunction(
     nameOrSignature: "version"
   ): TypedContractMethod<[], [string], "view">;
@@ -1643,13 +1541,6 @@ export interface GovernorVetoer extends BaseContract {
     QuorumNumeratorUpdatedEvent.InputTuple,
     QuorumNumeratorUpdatedEvent.OutputTuple,
     QuorumNumeratorUpdatedEvent.OutputObject
-  >;
-  getEvent(
-    key: "SuperQuorumNumeratorUpdated"
-  ): TypedContractEvent<
-    SuperQuorumNumeratorUpdatedEvent.InputTuple,
-    SuperQuorumNumeratorUpdatedEvent.OutputTuple,
-    SuperQuorumNumeratorUpdatedEvent.OutputObject
   >;
   getEvent(
     key: "TimelockChange"
@@ -1785,17 +1676,6 @@ export interface GovernorVetoer extends BaseContract {
       QuorumNumeratorUpdatedEvent.InputTuple,
       QuorumNumeratorUpdatedEvent.OutputTuple,
       QuorumNumeratorUpdatedEvent.OutputObject
-    >;
-
-    "SuperQuorumNumeratorUpdated(uint256,uint256)": TypedContractEvent<
-      SuperQuorumNumeratorUpdatedEvent.InputTuple,
-      SuperQuorumNumeratorUpdatedEvent.OutputTuple,
-      SuperQuorumNumeratorUpdatedEvent.OutputObject
-    >;
-    SuperQuorumNumeratorUpdated: TypedContractEvent<
-      SuperQuorumNumeratorUpdatedEvent.InputTuple,
-      SuperQuorumNumeratorUpdatedEvent.OutputTuple,
-      SuperQuorumNumeratorUpdatedEvent.OutputObject
     >;
 
     "TimelockChange(address,address)": TypedContractEvent<

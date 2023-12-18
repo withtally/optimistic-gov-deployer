@@ -11,11 +11,11 @@ import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";
 
 /**
- * @title GovernorNFT
+ * @title ERC721Token
  * @dev This contract is an implementation of an ERC721 token with additional features such as pausing, minting, burning, and voting.
  * It inherits from various OpenZeppelin ERC721 extension contracts and uses AccessControl for role-based access control.
  */
-contract GovernorNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausable, AccessControl, ERC721Burnable, EIP712, ERC721Votes {
+contract ERC721Token is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausable, AccessControl, ERC721Burnable, EIP712, ERC721Votes {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
@@ -103,5 +103,30 @@ contract GovernorNFT is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausab
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev Returns the current timestamp as a `uint48`.
+     * @return The current timestamp.
+     */
+    function clock() 
+        public 
+        view 
+        override 
+        returns (uint48) {
+        return uint48(block.timestamp);
+    }
+
+    /**
+     * @dev Returns the clock mode as a string.
+     * @return The clock mode.
+     */
+    function CLOCK_MODE()
+        public
+        view
+        virtual
+        override
+        returns (string memory) {
+        return "mode=timestamp";
     }
 }

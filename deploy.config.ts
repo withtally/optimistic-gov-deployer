@@ -31,6 +31,7 @@ export const config:any ={
     proposalThreshold: 0, // if you want to prevent proposal spam, you should set the threshold to value diff from zero.
     // vote extension, if a late quorum is reached how much you want to extend it ?
     voteExtension: 7200, // 7200 would be a day.
+    superQuorumThreshold: 50. // 50% of the total supply
   },
   // Governor
   vetoGovernor:{
@@ -50,12 +51,4 @@ export const config:any ={
   },
   // true set clockMode as timestamp, false is block
   clockMode: false,
-  // First Mint is used to mint the first tokens to this governance
-  // it has to be higher than the proposalThreshold
-  // so it is enough tokens to the governance to be able to propose
-  firstMint:{
-    amount: 1000000,
-    // To is an Ethereum Address, if empty, it will be the deployer, also it not correct, it will be the deployer ( warned when deploying )
-    to: "",
-  }
 }

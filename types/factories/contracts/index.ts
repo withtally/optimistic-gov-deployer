@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as clock from "./clock";
-export { GovernorNFT__factory } from "./GovernorNFT__factory";
-export { GovernorToken__factory } from "./GovernorToken__factory";
+export { ERC20Token__factory } from "./ERC20Token__factory";
+export { ERC721Token__factory } from "./ERC721Token__factory";
 export { OZGovernor__factory } from "./OZGovernor__factory";
+export { OzGovernorSuperQuorum__factory } from "./OzGovernorSuperQuorum__factory";
 export { TimelockController__factory } from "./TimelockController__factory";
-export { VetoGovernor__factory } from "./VetoGovernor__factory";

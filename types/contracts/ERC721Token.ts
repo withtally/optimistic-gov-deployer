@@ -23,7 +23,7 @@ import type {
   TypedContractMethod,
 } from "../common";
 
-export interface GovernorNFTInterface extends Interface {
+export interface ERC721TokenInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "CLOCK_MODE"
@@ -544,11 +544,11 @@ export namespace UnpausedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface GovernorNFT extends BaseContract {
-  connect(runner?: ContractRunner | null): GovernorNFT;
+export interface ERC721Token extends BaseContract {
+  connect(runner?: ContractRunner | null): ERC721Token;
   waitForDeployment(): Promise<this>;
 
-  interface: GovernorNFTInterface;
+  interface: ERC721TokenInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,

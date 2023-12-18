@@ -13,11 +13,11 @@ import "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.
 import "tally-superquorum/contracts/extension/GovernorVotesSuperQuorumFraction.sol";
 
 /**
- * @title VetoGovernor
- * @dev VetoGovernor is a smart contract that extends OpenZeppelin's Governor with additional features
+ * @title OzGovernorSuperQuorum
+ * @dev OzGovernorSuperQuorum is a smart contract that extends OpenZeppelin's Governor with additional features
  * for voting, timelock, and quorum.
  */
-contract VetoGovernor is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
+contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
     
     /**
      * @dev Initializes the OZGovernor contract.
@@ -242,5 +242,30 @@ contract VetoGovernor is Governor, GovernorSettings, GovernorCountingSimple, Gov
         returns (address)
     {
         return super._executor();
+    }
+
+    /**
+     * @dev Returns the current timestamp as a `uint48`.
+     * @return The current timestamp.
+     */
+    function clock() 
+        public 
+        view 
+        override(Governor,GovernorVotes)  
+        returns (uint48) {
+        return uint48(block.timestamp);
+    }
+
+    /**
+     * @dev Returns the clock mode as a string.
+     * @return The clock mode.
+     */
+    function CLOCK_MODE()
+        public
+        view
+        virtual
+        override(Governor,GovernorVotes) 
+        returns (string memory) {
+        return "mode=timestamp";
     }
 }

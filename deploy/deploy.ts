@@ -76,9 +76,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-		token = await deploy("GovernorToken", {
+		token = await deploy("ERC20Token", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/GovernorToken.sol:GovernorToken" : "contracts/GovernorToken.sol:GovernorToken",
+			contract: config.clockMode ? "contracts/clock/ERC20Token.sol:ERC20Token" : "contracts/ERC20Token.sol:ERC20Token",
 			args: args,
 			log: true,
 		});
@@ -101,6 +101,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			` - ${hre.network.name} - block number: ${tdBlock?.number}\n${verify_str}\n\n`
 		);
 	})();
+	
 	//// deploy timelock
 	await (async function deployTimelock() {
 
@@ -161,6 +162,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			` - ${hre.network.name} - block number: ${timelockBlock?.number}\n${verify_str_timelock}\n\n`
 		);
 	})();
+
 	//// deploy vetor governor
 	await (async function deployVetoer() {
 
@@ -204,9 +206,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		]
 		const gasLimit = 5000000; // Example gas limit, adjust as needed
 
-		governor = await deploy("VetoGovernor", {
+		governor = await deploy("OzGovernorSuperQuorum", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/VetoGovernor.sol:VetoGovernor" : "contracts/VetoGovernor.sol:VetoGovernor",
+			contract: config.clockMode ? "contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum" : "contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum",
 			args: args,
 			log: false,
 			gasLimit: gasLimit, // Adding the gasLimit here
@@ -264,9 +266,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-		nft = await deploy("GovernorNFT", {
+		nft = await deploy("ERC721Token", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/GovernorNFT.sol:GovernorNFT" : "contracts/GovernorNFT.sol:GovernorNFT",
+			contract: config.clockMode ? "contracts/clock/ERC721Token.sol:ERC721Token" : "contracts/ERC721Token.sol:ERC721Token",
 			args: args,
 			log: true,
 		});
@@ -289,6 +291,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			` - ${hre.network.name} - block number: ${nftBlock?.number}\n${verify_str}\n\n`
 		);
 	})();
+
 	//// deploy nft governor
 	await (async function deployNFTGovernor() {
 
@@ -326,9 +329,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.voteExtension
 
 		]
-		governor = await deploy("OZGovernor", {
+		governor = await deploy("OzGovernorSuperQuorum", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/OZGovernor.sol:OZGovernor" : "contracts/OZGovernor.sol:OZGovernor",
+			contract: config.clockMode ? "contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum" : "contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum",
 			args: args,
 			log: true,
 		});
@@ -351,6 +354,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			` - ${hre.network.name} - block number: ${govBlock?.number}\n${verify_str}\n\n`
 		);
 	})();
+
 	//// ending line on contracts.out
 	fs.appendFileSync(
 		"contracts.out",

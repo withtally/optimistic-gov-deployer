@@ -21,9 +21,9 @@ import type {
   TypedLogDescription,
   TypedListener,
   TypedContractMethod,
-} from "../common";
+} from "../../common";
 
-export interface VetoGovernorInterface extends Interface {
+export interface OzGovernorSuperQuorumInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "BALLOT_TYPEHASH"
@@ -832,11 +832,11 @@ export namespace VotingPeriodSetEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export interface VetoGovernor extends BaseContract {
-  connect(runner?: ContractRunner | null): VetoGovernor;
+export interface OzGovernorSuperQuorum extends BaseContract {
+  connect(runner?: ContractRunner | null): OzGovernorSuperQuorum;
   waitForDeployment(): Promise<this>;
 
-  interface: VetoGovernorInterface;
+  interface: OzGovernorSuperQuorumInterface;
 
   queryFilter<TCEvent extends TypedContractEvent>(
     event: TCEvent,
