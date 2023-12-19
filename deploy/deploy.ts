@@ -51,8 +51,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		console.log("VETOER TOKEN ARGS");
 		console.log("token name:\x1B[36m", config.token.name, "\x1B[37m");
 		console.log("token symbol:\x1B[36m", config.token.symbol, "\x1B[37m");
-		console.log("default admin:\x1B[33m", admin_address, "\x1B[37m");
-		console.log("pauser:\x1B[33m", admin_address, "\x1B[37m");
+		console.log("default admin:\x1B[33m", minter, "\x1B[37m");
+		console.log("pauser:\x1B[33m", minter, "\x1B[37m");
 		console.log("minter:\x1B[33m", minter, "\x1B[37m\n");
 
 
@@ -62,8 +62,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.token.name,
 			config.token.symbol,
 			// Admin Address is pointing to the governance contract
-			admin_address,
-			admin_address,
+			minter,
+			minter,
 			// If the minter is neither the deployer nor an EOA, no one will be able to mint,
 			// after all you can only propose and vote while having tokens, 
 			// so no one would be able to execute or propose anything in this governance.
@@ -91,7 +91,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		let verify_str =
 			`npx hardhat verify ` +
 			`--network ${hre.network.name} ` +
-			`${token_address} "${config.token.name}" "${config.token.symbol}" ${admin_address} ${admin_address} ${minter}`
+			`${token_address} "${config.token.name}" "${config.token.symbol}" ${minter} ${minter} ${minter}`
 		console.log("\n" + verify_str + "\n");
 
 		// save it to a file to make sure the user doesn't lose it.
@@ -144,12 +144,14 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			`${config.timelock.minDelay},` +
 			`${JSON.stringify(proposers)},` +
 			`${JSON.stringify(executors)},` +
+			`${timelock_address}` +
 			`];`
 		);
 
 		// verify cli command
 		const verify_str_timelock = `npx hardhat verify ` +
 			`--network ${hre.network.name} ` +
+			`--contract "contracts/TimelockController.sol:TimelockController" ` +
 			`--constructor-args arguments_${timelock.address}.js ` +
 			`${timelock.address}\n`;
 		console.log("\n" + verify_str_timelock);
@@ -221,7 +223,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		let verify_str =
 			`npx hardhat verify ` +
 			`--network ${hre.network.name} ` +
-			`${await governor.address} "${config.vetoGovernor.name}" ${token_address} ${timelock_address} ${config.vetoGovernor.votingDelay} ${config.vetoGovernor.votingPeriod} ${config.vetoGovernor.proposalThreshold} ${config.vetoGovernor.quorumNumerator} ${config.vetoGovernor.voteExtension}`
+			`${await governor.address} "${config.vetoGovernor.name}" ${token_address} ${timelock_address} ${config.vetoGovernor.votingDelay} ${config.vetoGovernor.votingPeriod} ${config.vetoGovernor.proposalThreshold} ${config.vetoGovernor.quorumNumerator} ${config.vetoGovernor.superQuorumThreshold} ${config.vetoGovernor.voteExtension}`
 		console.log("\n" + verify_str + "\n");
 
 
@@ -252,8 +254,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.nft.name,
 			config.nft.symbol,
 			// Admin Address is pointing to the governance contract
-			admin_address,
-			admin_address,
+			minterNFT,
+			minterNFT,
 			// if minter is not deployer no one will be able to mint, 
 			// After all, you can only propose and vote while having tokens, 
 			// so no one would be able to execute or propose anything in this governance system.
@@ -305,6 +307,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		console.log("voting period:\x1B[36m", config.governor.votingPeriod, "\x1B[37m");
 		console.log("proposal threshold period:\x1B[36m", config.governor.proposalThreshold, "\x1B[37m");
 		console.log("quorum numerator:\x1B[36m", config.governor.quorumNumerator, "\x1B[37m");
+		console.log("super quorum threshold:\x1B[36m", config.governor.superQuorumThreshold, "\x1B[37m");
 		console.log("vote extension:\x1B[36m", config.governor.voteExtension, "\x1B[37m\n");
 
 		/*  
@@ -315,6 +318,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			uint32 _initialVotingPeriod,
 			uint256 _initialProposalThreshold,
 			uint256 _quorumNumeratorValue,
+			uint48 _superQuorumThreshold,
 			uint48 _initialVoteExtension
 		*/
 		let governor: DeployResult;
@@ -326,6 +330,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.votingPeriod,
 			config.governor.proposalThreshold,
 			config.governor.quorumNumerator,
+			config.governor.superQuorumThreshold,
 			config.governor.voteExtension
 
 		]
@@ -343,7 +348,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		let verify_str =
 			`npx hardhat verify ` +
 			`--network ${hre.network.name} ` +
-			`${await governor.address} "${config.governor.name}" ${nft_address} ${timelock_address} ${config.governor.votingDelay} ${config.governor.votingPeriod} ${config.governor.proposalThreshold} ${config.governor.quorumNumerator} ${config.governor.voteExtension}`
+			`${await governor.address} "${config.governor.name}" ${nft_address} ${timelock_address} ${config.governor.votingDelay} ${config.governor.votingPeriod} ${config.governor.proposalThreshold} ${config.governor.quorumNumerator} ${config.vetoGovernor.superQuorumThreshold} ${config.governor.voteExtension}`
 		console.log("\n" + verify_str + "\n");
 
 
