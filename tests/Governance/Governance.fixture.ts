@@ -7,7 +7,7 @@ import { config } from "../../deploy.config"
 import { TimelockController__factory,ERC20Token__factory, OZGovernor__factory } from "../../types/factories/contracts";
 
 export async function deployGovernanceContractsFixture(): Promise<{
-    token: ERC20Token;
+    token: GovernorToken;
     timelock: TimelockController;
     governor: OZGovernor;
 }> {
@@ -22,12 +22,12 @@ export async function deployGovernanceContractsFixture(): Promise<{
     const admin_address = governance_address;
 
     // TOKEN CONTRACT
-    const ERC20Token = (await ethers.getContractFactory("contracts/ERC20Token.sol:ERC20Token")) as ERC20Token__factory
-    const token = await ERC20Token.connect(deployerSigner).deploy(
+    const GovernorToken = (await ethers.getContractFactory("contracts/ERC20Token.sol:ERC20Token")) as ERC20Token__factory
+    const token = await GovernorToken.connect(deployerSigner).deploy(
         config.token.name,
         config.token.symbol,
-        admin_address,
-        admin_address,
+        deployerSigner.address,
+        deployerSigner.address,
         deployerSigner.address,
     );
 
@@ -57,7 +57,7 @@ export async function deployGovernanceContractsFixture(): Promise<{
 }
 
 export async function deployGovernanceContractsClockTimestampFixture(): Promise<{
-    token: ERC20Token;
+    token: GovernorToken;
     timelock: TimelockController;
     governor: OZGovernor;
 }> {
@@ -72,12 +72,12 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const admin_address = governance_address;
 
     // TOKEN CONTRACT
-    const ERC20Token = (await ethers.getContractFactory("contracts/clock/ERC20Token.sol:ERC20Token")) as ERC20Token__factory
-    const token = await ERC20Token.connect(deployerSigner).deploy(
+    const GovernorToken = (await ethers.getContractFactory("contracts/clock/ERC20Token.sol:ERC20Token")) as ERC20Token__factory
+    const token = await GovernorToken.connect(deployerSigner).deploy(
         config.token.name,
         config.token.symbol,
-        admin_address,
-        admin_address,
+        deployerSigner.address,
+        deployerSigner.address,
         deployerSigner.address,
     );
 
