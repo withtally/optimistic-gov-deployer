@@ -115,6 +115,9 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
             (superQuorum(proposalSnapshot(proposalId)) <=
                 forVotes + abstainVotes)
         ) {
+            if(proposalEta(proposalId) != 0){
+                return ProposalState.Queued;
+            }
             return ProposalState.Succeeded;
         } else {
             return proposalState;
