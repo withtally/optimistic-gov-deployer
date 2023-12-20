@@ -99,7 +99,6 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
 
         // We can Queue before the voting Period because it is a SuperQuorum.
 
-
         // Wait for voting period to end
         // await ethers.provider.send("evm_increaseTime", [86400]); // Increase time by 1 day
         // await ethers.provider.send("evm_mine"); // Mine a new block

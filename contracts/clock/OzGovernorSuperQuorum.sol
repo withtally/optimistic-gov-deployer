@@ -88,7 +88,7 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
     }
 
     /// @notice Returns the current state of a proposal.
-    /// @dev Overridden to include logic for handling super quorum.
+    /// @dev Overridden to include logic for handling super quorum
     /// @param proposalId The ID of the proposal.
     /// @return Current state of the proposal.
     function state(

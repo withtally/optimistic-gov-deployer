@@ -48,6 +48,7 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
         GovernorTimelockControl(_timelock)
     {}
 
+
     /**
      * @notice Retrieves the voting delay configured in the settings.
      * @return The configured voting delay.
@@ -88,7 +89,7 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
         return super.quorum(blockNumber);
     }
 
-/// @notice Returns the current state of a proposal.
+    /// @notice Returns the current state of a proposal.
     /// @dev Overridden to include logic for handling super quorum.
     /// @param proposalId The ID of the proposal.
     /// @return Current state of the proposal.
