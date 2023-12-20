@@ -17,7 +17,7 @@ import "tally-superquorum/contracts/extension/GovernorVotesSuperQuorumFraction.s
  * @dev OzGovernorSuperQuorum is a smart contract that extends OpenZeppelin's Governor with additional features
  * for voting, timelock, and quorum.
  */
-contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
+contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes, GovernorPreventLateQuorum,GovernorVotesSuperQuorumFraction, GovernorVotesQuorumFraction, GovernorTimelockControl {
     
     /**
      * @dev Initializes the OZGovernor contract.
@@ -87,18 +87,36 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
         return super.quorum(blockNumber);
     }
 
-    /**
-     * @notice Retrieves the current state of a proposal.
-     * @param proposalId The ID of the proposal to query.
-     * @return The current state of the proposal (e.g., Pending, Active, Canceled, Defeated, Succeeded, Queued, Executed).
-     */
-    function state(uint256 proposalId)
+    /// @notice Returns the current state of a proposal.
+    /// @dev Overridden to include logic for handling super quorum.
+    /// @param proposalId The ID of the proposal.
+    /// @return Current state of the proposal.
+    function state(
+        uint256 proposalId
+    )
         public
         view
         override(Governor, GovernorTimelockControl)
         returns (ProposalState)
     {
-        return super.state(proposalId);
+        ProposalState proposalState = super.state(proposalId);
+
+        (
+            uint256 againstVotes,
+            uint256 forVotes,
+            uint256 abstainVotes
+        ) = proposalVotes(proposalId);
+
+        // This overrides how succeeded is calculated only if we're over superquorum
+        if (
+            proposalState == ProposalState.Active &&
+            (superQuorum(proposalSnapshot(proposalId)) <=
+                forVotes + abstainVotes)
+        ) {
+            return ProposalState.Succeeded;
+        } else {
+            return proposalState;
+        }
     }
 
     /**

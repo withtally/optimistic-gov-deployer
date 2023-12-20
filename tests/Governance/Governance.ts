@@ -8,7 +8,7 @@ import type { Signers } from "../types";
 import { deployGovernanceContractsFixture } from "./Governance.fixture";
 import { shouldBehaveLikeGovernor } from "./Goverance.behavior";
 
-describe("OZGovernor", async function () {
+describe("OZGovernorSuperQuorum", async function () {
   before(async function () {
     this.signers = {} as Signers;
 

@@ -89,25 +89,28 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         const numberOfBlocks = Number(await governor.votingDelay()) + 100;
         await mine(numberOfBlocks);
 
-        // Vote
-        await expect( governor.castVote(proposalId, 1n)).to.emit(governor, "VoteCast");
-
         //try to queue before is executable and fails
 
         // Queue proposal
-       await  expect( governor.queue(proposalId)).to.be.reverted;
+        await  expect( governor.queue(proposalId)).to.be.reverted;
+
+        // Vote
+        await expect( governor.castVote(proposalId, 1n)).to.emit(governor, "VoteCast");
+
+        // We can Queue before the voting Period because it is a SuperQuorum.
+
 
         // Wait for voting period to end
         // await ethers.provider.send("evm_increaseTime", [86400]); // Increase time by 1 day
         // await ethers.provider.send("evm_mine"); // Mine a new block
-        await mine(Number(await governor.votingPeriod()) + 100);
+        // await mine(Number(await governor.votingPeriod()) + 100);
 
         // expect proposal state to be succeeded
         let proposalState = await governor.state(proposalId);
         expect(proposalState).to.be.equal(4);
 
         // Queue proposal
-        await expect( governor.queue(proposalId)).to.emit(governor, "ProposalQueued");
+        await expect( await governor.queue(proposalId)).to.emit(governor, "ProposalQueued");
 
         // expect proposal state to be queued
         proposalState = await governor.state(proposalId);

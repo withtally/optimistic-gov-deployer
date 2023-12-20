@@ -74,11 +74,16 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
       | "setVotingDelay"
       | "setVotingPeriod"
       | "state"
+      | "superQuorum"
+      | "superQuorumDenominator"
+      | "superQuorumNumerator()"
+      | "superQuorumNumerator(uint256)"
       | "supportsInterface"
       | "timelock"
       | "token"
       | "updateQuorumNumerator"
       | "updateTimelock"
+      | "updatesuperQuorumNumerator"
       | "version"
       | "votingDelay"
       | "votingPeriod"
@@ -95,6 +100,7 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
       | "ProposalQueued"
       | "ProposalThresholdSet"
       | "QuorumNumeratorUpdated"
+      | "SuperQuorumNumeratorUpdated"
       | "TimelockChange"
       | "VoteCast"
       | "VoteCastWithParams"
@@ -296,6 +302,22 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
   ): string;
   encodeFunctionData(functionFragment: "state", values: [BigNumberish]): string;
   encodeFunctionData(
+    functionFragment: "superQuorum",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "superQuorumDenominator",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "superQuorumNumerator()",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "superQuorumNumerator(uint256)",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
@@ -308,6 +330,10 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
   encodeFunctionData(
     functionFragment: "updateTimelock",
     values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updatesuperQuorumNumerator",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "version", values?: undefined): string;
   encodeFunctionData(
@@ -479,6 +505,22 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "state", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "superQuorum",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "superQuorumDenominator",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "superQuorumNumerator()",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "superQuorumNumerator(uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
@@ -490,6 +532,10 @@ export interface OzGovernorSuperQuorumInterface extends Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "updateTimelock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updatesuperQuorumNumerator",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
@@ -645,6 +691,25 @@ export namespace ProposalThresholdSetEvent {
 }
 
 export namespace QuorumNumeratorUpdatedEvent {
+  export type InputTuple = [
+    oldQuorumNumerator: BigNumberish,
+    newQuorumNumerator: BigNumberish
+  ];
+  export type OutputTuple = [
+    oldQuorumNumerator: bigint,
+    newQuorumNumerator: bigint
+  ];
+  export interface OutputObject {
+    oldQuorumNumerator: bigint;
+    newQuorumNumerator: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
+export namespace SuperQuorumNumeratorUpdatedEvent {
   export type InputTuple = [
     oldQuorumNumerator: BigNumberish,
     newQuorumNumerator: BigNumberish
@@ -1112,6 +1177,18 @@ export interface OzGovernorSuperQuorum extends BaseContract {
 
   state: TypedContractMethod<[proposalId: BigNumberish], [bigint], "view">;
 
+  superQuorum: TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
+
+  superQuorumDenominator: TypedContractMethod<[], [bigint], "view">;
+
+  "superQuorumNumerator()": TypedContractMethod<[], [bigint], "view">;
+
+  "superQuorumNumerator(uint256)": TypedContractMethod<
+    [timepoint: BigNumberish],
+    [bigint],
+    "view"
+  >;
+
   supportsInterface: TypedContractMethod<
     [interfaceId: BytesLike],
     [boolean],
@@ -1130,6 +1207,12 @@ export interface OzGovernorSuperQuorum extends BaseContract {
 
   updateTimelock: TypedContractMethod<
     [newTimelock: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  updatesuperQuorumNumerator: TypedContractMethod<
+    [newQuorumNumerator: BigNumberish],
     [void],
     "nonpayable"
   >;
@@ -1451,6 +1534,18 @@ export interface OzGovernorSuperQuorum extends BaseContract {
     nameOrSignature: "state"
   ): TypedContractMethod<[proposalId: BigNumberish], [bigint], "view">;
   getFunction(
+    nameOrSignature: "superQuorum"
+  ): TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "superQuorumDenominator"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "superQuorumNumerator()"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "superQuorumNumerator(uint256)"
+  ): TypedContractMethod<[timepoint: BigNumberish], [bigint], "view">;
+  getFunction(
     nameOrSignature: "supportsInterface"
   ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
   getFunction(
@@ -1469,6 +1564,13 @@ export interface OzGovernorSuperQuorum extends BaseContract {
   getFunction(
     nameOrSignature: "updateTimelock"
   ): TypedContractMethod<[newTimelock: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "updatesuperQuorumNumerator"
+  ): TypedContractMethod<
+    [newQuorumNumerator: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
   getFunction(
     nameOrSignature: "version"
   ): TypedContractMethod<[], [string], "view">;
@@ -1541,6 +1643,13 @@ export interface OzGovernorSuperQuorum extends BaseContract {
     QuorumNumeratorUpdatedEvent.InputTuple,
     QuorumNumeratorUpdatedEvent.OutputTuple,
     QuorumNumeratorUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "SuperQuorumNumeratorUpdated"
+  ): TypedContractEvent<
+    SuperQuorumNumeratorUpdatedEvent.InputTuple,
+    SuperQuorumNumeratorUpdatedEvent.OutputTuple,
+    SuperQuorumNumeratorUpdatedEvent.OutputObject
   >;
   getEvent(
     key: "TimelockChange"
@@ -1676,6 +1785,17 @@ export interface OzGovernorSuperQuorum extends BaseContract {
       QuorumNumeratorUpdatedEvent.InputTuple,
       QuorumNumeratorUpdatedEvent.OutputTuple,
       QuorumNumeratorUpdatedEvent.OutputObject
+    >;
+
+    "SuperQuorumNumeratorUpdated(uint256,uint256)": TypedContractEvent<
+      SuperQuorumNumeratorUpdatedEvent.InputTuple,
+      SuperQuorumNumeratorUpdatedEvent.OutputTuple,
+      SuperQuorumNumeratorUpdatedEvent.OutputObject
+    >;
+    SuperQuorumNumeratorUpdated: TypedContractEvent<
+      SuperQuorumNumeratorUpdatedEvent.InputTuple,
+      SuperQuorumNumeratorUpdatedEvent.OutputTuple,
+      SuperQuorumNumeratorUpdatedEvent.OutputObject
     >;
 
     "TimelockChange(address,address)": TypedContractEvent<

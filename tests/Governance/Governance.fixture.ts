@@ -2,14 +2,16 @@ import { ethers } from "hardhat";
 // import hardhat from "hardhat";
 
 import { getExpectedContractAddress } from "../../helpers/expected_contract";
-import { type OZGovernor, type TimelockController, type ERC20Token,  } from "../../types";
+import { type OzGovernorSuperQuorum, type TimelockController, type ERC20Token, type ERC721Token  } from "../../types";
 import { config } from "../../deploy.config"
-import { TimelockController__factory,ERC20Token__factory, OZGovernor__factory } from "../../types/factories/contracts";
+import { TimelockController__factory,ERC20Token__factory, OzGovernorSuperQuorum__factory, ERC721Token__factory } from "../../types/factories/contracts";
 
 export async function deployGovernanceContractsFixture(): Promise<{
-    token: GovernorToken;
+    token: ERC20Token;
     timelock: TimelockController;
-    governor: OZGovernor;
+    governor: OzGovernorSuperQuorum;
+    nft: ERC721Token;
+    governorNFT: OzGovernorSuperQuorum;
 }> {
     const signers = await ethers.getSigners();
     const deployerSigner = signers[0];
@@ -40,17 +42,18 @@ export async function deployGovernanceContractsFixture(): Promise<{
         timelock_address,
     );
 
-    // GOVERNOR CONTRACT
-    const OZGovernor = (await ethers.getContractFactory("contracts/OZGovernor.sol:OZGovernor")) as OZGovernor__factory
-    const governor = await OZGovernor.connect(deployerSigner).deploy(
-        config.governor.name,
+    // VETO GOVERNOR CONTRACT
+    const OzGovernorSuperQuorum = (await ethers.getContractFactory("contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const governor = await OzGovernorSuperQuorum.connect(deployerSigner).deploy(
+        config.vetoGovernor.name,
         token_address,
         timelock_address,
-        config.governor.votingDelay,
-        config.governor.votingPeriod,
-        config.governor.proposalThreshold,
-        config.governor.quorumNumerator,
-        config.governor.voteExtension,
+        config.vetoGovernor.votingDelay,
+        config.vetoGovernor.votingPeriod,
+        config.vetoGovernor.proposalThreshold,
+        config.vetoGovernor.quorumNumerator,
+        config.vetoGovernor.superQuorumThreshold,
+        config.vetoGovernor.voteExtension,
     );
 
     return { token, timelock, governor };
