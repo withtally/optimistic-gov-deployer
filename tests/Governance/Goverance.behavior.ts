@@ -370,6 +370,154 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         expect(proposalState).to.be.equal(3);
     });
 
+    it("should be able to veto the governorNFT with governor", async function () {
+        const { token, governor, signers, timelock, nft,governorNFT } = this;
+
+        // initial mint
+        const amountToMint = 10000n;
+        await token.mint(signers.admin, amountToMint);
+        await nft.safeMint(signers.admin, "a");
+
+        const balanceOne = await token.balanceOf(signers.admin.address);
+        expect(balanceOne).to.be.equal(amountToMint);
+
+        const balanceOneNFT = await nft.balanceOf(signers.admin.address);
+        expect(balanceOneNFT).to.be.equal(1n);
+
+        // delegate
+        await token.delegate(signers.admin.address);
+        await nft.delegate(signers.admin.address);
+
+        await expect(token.grantRole(await token.MINTER_ROLE(), await timelock.getAddress())).to.emit(token, "RoleGranted");
+        await expect(nft.grantRole(await nft.MINTER_ROLE(), await timelock.getAddress())).to.emit(nft, "RoleGranted");
+
+        // Propose
+        const proposalTx = await governorNFT.propose(
+            [await nft.getAddress()], // targets 
+            [0n], // value
+            [token.interface.encodeFunctionData("mint", [signers.notAuthorized.address, amountToMint])],
+            "Proposal to mint 1 NFT for admin"// description
+        );
+
+        expect(proposalTx).to.emit(governorNFT, "ProposalCreated");
+
+        // Wait for the transaction to be mined
+        const receipt = await proposalTx.wait(1);
+
+        // get Last block
+        const createBlock = await ethers.provider.getBlock("latest");
+        console.log("createdBlock",createBlock?.number);
+
+        // console.log("proposalId", receipt?.logs);
+
+        const eventLogs: EventLog[] = (receipt?.logs ?? []).filter((log): log is EventLog => true);
+
+        // console.log("eventLogs", eventLogs);
+
+        // Find the ProposalCreated event in the transaction receipt
+        const event = eventLogs.find((log) => log.fragment.name === "ProposalCreated");
+        // console.log("event", event);
+
+        const logDescription = governorNFT.interface.parseLog({
+            topics: event?.topics ? [...event.topics] : [],
+            data: event?.data ?? "",
+        });
+
+        // console.log("logDescription", logDescription);
+
+        // Get the proposalId from the event arguments
+        const proposalId = logDescription?.args["proposalId"]
+
+        // check proposal state
+        let proposalState = await governorNFT.state(proposalId);
+        expect(proposalState).to.be.equal(0);
+
+        // governor will create proposal to veto the proposalId
+        // this targets timelock to cancel the proposal
+        const vetoTx = await governor.propose(
+            [await governor.getAddress()], // targets 
+            [0n], // value
+            [timelock.interface.encodeFunctionData("cancel", [ethers.encodeBytes32String(proposalId)])],
+            "Proposal to veto the proposalId"// description
+        );
+
+        expect(vetoTx).to.emit(governor, "ProposalCreated");
+        
+        // Wait for the transaction to be mined
+        // Wait for the transaction to be mined
+        const receiptVeto = await vetoTx.wait(1);
+
+        // console.log("proposalId", receipt?.logs);
+
+        const eventLogsVeto: EventLog[] = (receiptVeto?.logs ?? []).filter((log): log is EventLog => true);
+
+        // console.log("eventLogs", eventLogs);
+
+        // Find the ProposalCreated event in the transaction receipt
+        const eventVeto = eventLogsVeto.find((log) => log.fragment.name === "ProposalCreated");
+        // console.log("event", event);
+
+        const logDescriptionVeto = governorNFT.interface.parseLog({
+            topics: eventVeto?.topics ? [...eventVeto.topics] : [],
+            data: eventVeto?.data ?? "",
+        });
+
+        // console.log("logDescription", logDescription);
+
+        // Get the proposalId from the event arguments
+        const proposalIdToVeto = logDescriptionVeto?.args["proposalId"]
+
+        // get Last block
+        const vetoCreatedBlock = await ethers.provider.getBlock("latest");
+        
+        // Wait Voting Delay
+        const numberOfBlocks = Number(await governor.votingDelay()) + 100;
+        await mine(numberOfBlocks);
+
+        // Vote
+        await expect(governor.castVote(proposalIdToVeto, 1)).to.emit(governor, "VoteCast");
+
+        // Queue and Execute
+        await mine(Number(await governor.votingPeriod()) + 10);
+
+        // check optimistic governor proposal proposal state
+        proposalState = await governorNFT.state(proposalId);
+
+        //proposal at governor NFT should be ACTIVE
+        expect(proposalState).to.be.equal(1);
+
+        await expect(governor.queue(proposalIdToVeto)).to.emit(governor, "ProposalQueued");
+        await mine( Number(await timelock.getMinDelay()) + 1);
+
+        proposalState = await governorNFT.state(proposalId);
+        // check optimistic governor proposal proposal state
+
+        // get Last block
+        const lastBlock = await ethers.provider.getBlock("latest");
+        console.log("logging block sitatuion",{
+            "created proposal block": createBlock?.number,
+            "block proposed veto": vetoCreatedBlock?.number,
+            "timelock Delay": await timelock.getMinDelay(),
+            "last block":lastBlock?.number,
+            "block + delays + periods": Number(createBlock?.number) + Number(await governorNFT.votingDelay()) + Number(await governorNFT.votingPeriod())
+        });
+
+        expect(proposalState).to.satisfy(num => num === 3n || num === 4n);
+        // have to equal to defeated or succeded
+        
+        // check if previous proposal is cancelled
+
+        console.log("HERE1", await governorNFT.state(proposalId))
+
+        // here it is complaining that the state is 3 Defeated
+        await expect(governor.execute(proposalIdToVeto)).to.emit(governor, "ProposalExecuted");
+
+        console.log("HERE2")
+
+
+
+    })
+
 }
 
 export async function shouldBehaveLikeGovernorWithTimestamp(): Promise<void> {

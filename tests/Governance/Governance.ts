@@ -21,10 +21,12 @@ describe("OZGovernorSuperQuorum", async function () {
 
   beforeEach(async function () {   
 
-    const { token,timelock,governor } = await this.loadFixture(deployGovernanceContractsFixture);
+    const { token,timelock,governor,nft,governorNFT } = await this.loadFixture(deployGovernanceContractsFixture);
     this.governor = governor;
     this.token = token;
     this.timelock = timelock;
+    this.nft = nft;
+    this.governorNFT = governorNFT;
 
   });
 
@@ -46,10 +48,12 @@ describe("OZGovernorSQWithTimestamp", async function () {
 
   beforeEach(async function () {   
 
-    const { token,timelock,governor } = await this.loadFixture(deployGovernanceContractsClockTimestampFixture);
+    const { token,timelock,governor,nft,governorNFT } = await this.loadFixture(deployGovernanceContractsClockTimestampFixture);
     this.governor = governor;
     this.token = token;
     this.timelock = timelock;
+    this.nft = nft;
+    this.governorNFT = governorNFT;
 
   });
 

@@ -20,6 +20,8 @@ export async function deployGovernanceContractsFixture(): Promise<{
     const governance_address = await getExpectedContractAddress(deployerSigner, 2);
     const timelock_address = await getExpectedContractAddress(deployerSigner, 1);
     const token_address = await getExpectedContractAddress(deployerSigner, 0);
+    const nft_address = await getExpectedContractAddress(deployerSigner, 3);
+    const nft_governance_address = await getExpectedContractAddress(deployerSigner, 4);
 
     const admin_address = governance_address;
 
@@ -37,8 +39,8 @@ export async function deployGovernanceContractsFixture(): Promise<{
     const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
-        [admin_address, timelock_address],
-        [admin_address, timelock_address],
+        [admin_address, timelock_address,nft_governance_address],
+        [admin_address, timelock_address,nft_governance_address],
         timelock_address,
     );
 
@@ -97,6 +99,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const governance_address = await getExpectedContractAddress(deployerSigner, 2);
     const timelock_address = await getExpectedContractAddress(deployerSigner, 1);
     const token_address = await getExpectedContractAddress(deployerSigner, 0);
+    const nft_governance_address = await getExpectedContractAddress(deployerSigner, 4);
 
     const admin_address = governance_address;
 
@@ -114,8 +117,8 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
-        [admin_address, timelock_address],
-        [admin_address, timelock_address],
+        [admin_address, timelock_address,nft_governance_address],
+        [admin_address, timelock_address,nft_governance_address],
         timelock_address,
     );
 
