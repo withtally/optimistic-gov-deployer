@@ -2,9 +2,9 @@ import { ethers } from "hardhat";
 // import hardhat from "hardhat";
 
 import { getExpectedContractAddress } from "../../helpers/expected_contract";
-import { type OzGovernorSuperQuorum, type TimelockController, type ERC20Token, type ERC721Token  } from "../../types";
+import { type OzGovernorSuperQuorum, type TimelockController, type ERC20Token, type ERC721Token } from "../../types";
 import { config } from "../../deploy.config"
-import { TimelockController__factory,ERC20Token__factory, OzGovernorSuperQuorum__factory, ERC721Token__factory } from "../../types/factories/contracts";
+import { TimelockController__factory, ERC20Token__factory, OzGovernorSuperQuorum__factory, ERC721Token__factory } from "../../types/factories/contracts";
 
 export async function deployGovernanceContractsFixture(): Promise<{
     token: ERC20Token;
@@ -34,7 +34,7 @@ export async function deployGovernanceContractsFixture(): Promise<{
     );
 
     // TIMELOCK CONTRACT
-    const TimelockController:TimelockController__factory =  (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
+    const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
         [admin_address, timelock_address],
@@ -56,13 +56,39 @@ export async function deployGovernanceContractsFixture(): Promise<{
         config.vetoGovernor.voteExtension,
     );
 
-    return { token, timelock, governor };
+    // NFT CONTRACT
+    const NFT = (await ethers.getContractFactory("contracts/ERC721Token.sol:ERC721Token")) as ERC721Token__factory
+    const nft = await NFT.connect(deployerSigner).deploy(
+        config.nft.name,
+        config.nft.symbol,
+        deployerSigner.address,
+        deployerSigner.address,
+        deployerSigner.address,
+    );
+
+    // NFT GOVERNOR CONTRACT
+    const OzGovernorSuperQuorum2 = (await ethers.getContractFactory("contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const governorNFT = await OzGovernorSuperQuorum2.connect(deployerSigner).deploy(
+        config.governor.name,
+        token_address,
+        timelock_address,
+        config.governor.votingDelay,
+        config.governor.votingPeriod,
+        config.governor.proposalThreshold,
+        config.governor.quorumNumerator,
+        config.governor.superQuorumThreshold,
+        config.governor.voteExtension,
+    );
+
+    return { token, timelock, governor, nft, governorNFT };
 }
 
 export async function deployGovernanceContractsClockTimestampFixture(): Promise<{
-    token: GovernorToken;
+    token: ERC20Token;
     timelock: TimelockController;
-    governor: OZGovernor;
+    governor: OzGovernorSuperQuorum;
+    nft: ERC721Token;
+    governorNFT: OzGovernorSuperQuorum;
 }> {
     const signers = await ethers.getSigners();
     const deployerSigner = signers[0];
@@ -85,7 +111,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     );
 
     // TIMELOCK CONTRACT
-    const TimelockController:TimelockController__factory =  (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
+    const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
         [admin_address, timelock_address],
@@ -93,9 +119,33 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
         timelock_address,
     );
 
-    // GOVERNOR CONTRACT
-    const OZGovernor = (await ethers.getContractFactory("contracts/clock/OZGovernor.sol:OZGovernor")) as OZGovernor__factory
-    const governor = await OZGovernor.connect(deployerSigner).deploy(
+    // VETO GOVERNOR CONTRACT
+    const OzGovernorSuperQuorum = (await ethers.getContractFactory("contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const governor = await OzGovernorSuperQuorum.connect(deployerSigner).deploy(
+        config.vetoGovernor.name,
+        token_address,
+        timelock_address,
+        config.vetoGovernor.votingDelay,
+        config.vetoGovernor.votingPeriod,
+        config.vetoGovernor.proposalThreshold,
+        config.vetoGovernor.quorumNumerator,
+        config.vetoGovernor.superQuorumThreshold,
+        config.vetoGovernor.voteExtension,
+    );
+
+    // NFT CONTRACT
+    const NFT = (await ethers.getContractFactory("contracts/clock/ERC721Token.sol:ERC721Token")) as ERC721Token__factory
+    const nft = await NFT.connect(deployerSigner).deploy(
+        config.nft.name,
+        config.nft.symbol,
+        deployerSigner.address,
+        deployerSigner.address,
+        deployerSigner.address,
+    );
+
+    // NFT GOVERNOR CONTRACT
+    const OzGovernorSuperQuorum2 = (await ethers.getContractFactory("contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const governorNFT = await OzGovernorSuperQuorum2.connect(deployerSigner).deploy(
         config.governor.name,
         token_address,
         timelock_address,
@@ -103,8 +153,9 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
         config.governor.votingPeriod,
         config.governor.proposalThreshold,
         config.governor.quorumNumerator,
+        config.governor.superQuorumThreshold,
         config.governor.voteExtension,
     );
 
-    return { token, timelock, governor };
+    return { token, timelock, governor,nft,governorNFT };
 }
