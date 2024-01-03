@@ -11,7 +11,8 @@ export const config:any = {
   },
   // Timelock
   timelock: {
-    minDelay: 86400, // 12 days
+    // minDelay: 86400, // 12 days
+    minDelay: 1200, //
   },
   // Governor
   governor: {

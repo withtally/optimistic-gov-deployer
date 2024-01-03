@@ -39,8 +39,8 @@ export async function deployGovernanceContractsFixture(): Promise<{
     const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
-        [admin_address, timelock_address,nft_governance_address],
-        [admin_address, timelock_address,nft_governance_address],
+        [admin_address, timelock_address,nft_governance_address,deployerSigner.address],
+        [admin_address, timelock_address,nft_governance_address,deployerSigner.address],
         timelock_address,
     );
 
@@ -117,8 +117,8 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const TimelockController: TimelockController__factory = (await ethers.getContractFactory("contracts/TimelockController.sol:TimelockController")) as TimelockController__factory
     const timelock = await TimelockController.connect(deployerSigner).deploy(
         config.timelock.minDelay,
-        [admin_address, timelock_address,nft_governance_address],
-        [admin_address, timelock_address,nft_governance_address],
+        [admin_address, timelock_address,nft_governance_address,deployerSigner.address],
+        [admin_address, timelock_address,nft_governance_address,deployerSigner.address],
         timelock_address,
     );
 

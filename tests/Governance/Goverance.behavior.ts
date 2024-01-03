@@ -2,6 +2,7 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
 import {
+    BigNumberish,
     EventLog,
 } from "ethers";
 import { mine } from "@nomicfoundation/hardhat-network-helpers";
@@ -427,6 +428,7 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
 
         // Get the proposalId from the event arguments
         const proposalId = logDescription?.args["proposalId"]
+        const proposalIdString = BigInt(proposalId).toString()
 
         // check proposal state
         let proposalState = await governorNFT.state(proposalId);
@@ -473,12 +475,21 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         // Wait Voting Delay
         const numberOfBlocks = Number(await governor.votingDelay()) + 100;
         await mine(numberOfBlocks);
-
+        console.log("after voting delay", (await ethers.provider.getBlock("latest"))?.number)
         // Vote
         await expect(governor.castVote(proposalIdToVeto, 1)).to.emit(governor, "VoteCast");
 
-        // Queue and Execute
-        await mine(Number(await governor.votingPeriod()) + 10);
+        const afterVotingDelay =  await ethers.provider.getBlock("latest");
+
+        // Wait Voting Delay
+        const numberOfBlocks2 = Number(await governorNFT.votingDelay()) - (
+            (afterVotingDelay?.number ?? 0) - (createBlock?.number ?? 0)
+        )
+        console.log("numberOfBlocks2",numberOfBlocks2)
+        console.log("currentBlock",afterVotingDelay?.number)
+        await mine(numberOfBlocks2 + 1);
+
+        const currentBlock =  await ethers.provider.getBlock("latest");
 
         // check optimistic governor proposal proposal state
         proposalState = await governorNFT.state(proposalId);
@@ -486,8 +497,28 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         //proposal at governor NFT should be ACTIVE
         expect(proposalState).to.be.equal(1);
 
+
+        await expect(governorNFT.castVote(proposalId, 1)).to.emit(governorNFT, "VoteCast");
+
+        const votingPeriodWait = Number(await governor.votingPeriod()) 
+        const numberOfBlocks3 = votingPeriodWait - (
+            (currentBlock?.number ?? 0) - (afterVotingDelay?.number ?? 0)
+        )
+        console.log("numberOfBlocks3",numberOfBlocks3)
+
+        // Queue and Execute
+        await mine(numberOfBlocks3 + 10);
+        console.log("after voting period", (await ethers.provider.getBlock("latest"))?.number)
+
+
+        // check optimistic governor proposal proposal state
+        proposalState = await governorNFT.state(proposalId);
+
+        //proposal at governor NFT should be SUCEEDED
+        expect(proposalState).to.be.equal(4);
+
         await expect(governor.queue(proposalIdToVeto)).to.emit(governor, "ProposalQueued");
-        await mine( Number(await timelock.getMinDelay()) + 1);
+        const queuedBlock = await ethers.provider.getBlock("latest");
 
         proposalState = await governorNFT.state(proposalId);
         // check optimistic governor proposal proposal state
@@ -505,17 +536,55 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         expect(proposalState).to.satisfy(num => num === 3n || num === 4n);
         // have to equal to defeated or succeded
         
+        // queue porosalId
+        await expect(governorNFT.queue(proposalId)).to.emit(governorNFT, "ProposalQueued");
         // check if previous proposal is cancelled
-
         console.log("HERE1", await governorNFT.state(proposalId))
+        expect( await governorNFT.state(proposalId) ).to.be.equal(5);
+        await mine(100);
+
+        console.log("governor nft timelock",{g:await governorNFT.timelock(), t:await timelock.getAddress()})
+        console.log("loging isOperation",await timelock.getOperationState(ethers.encodeBytes32String(proposalId)))
+
+        console.log("proposalID",proposalId)
+
+        // const details = await governorNFT.proposalDetails(proposalId);
+        // console.log("details",details)
+
+        // // const something = await governorNFT.hashProposal(
+        // //     details[0],
+        // //     details[1],
+        // //     details[2],
+        // //     details[3],
+        // // )
+        // // uint256(keccak256(abi.encode(targets, values, calldatas, descriptionHash)));
+        // /*
+        //     address[] memory targets,
+        //     uint256[] memory values,
+        //     bytes[] memory calldatas,
+        //     bytes32 descriptionHash
+        // */
+        // const proposalIdHash = ethers.solidityPackedKeccak256(
+        //     ["address[]","uint256[]","bytes[]","bytes32"],
+        //     [details[0],details[1],details[2],details[3]]
+        // )
+        // console.log("something",proposalIdHash)
+
+        // console.log("proposalIDHash",ethers.encodeBytes32String(ethers.toBeHex(proposalIdHash)))
+
+        // This does not work because it is not the correct proposalId bytes32
+        // await expect(timelock.cancel(ethers.encodeBytes32String(proposalId))).to.emit(timelock, "Cancelled");
+        // await expect(governorNFT.cancel(proposalId)).to.emit(governorNFT, "ProposalCanceled");
+
+        // mine
+        const timelockDelay = Number(await timelock.getMinDelay()) - (Number((await ethers.provider.getBlock("latest"))?.number) - Number(queuedBlock?.number)  )
+        console.log("timelockDelay",timelockDelay); 
+        await mine(timelockDelay + 1);
 
         // here it is complaining that the state is 3 Defeated
         await expect(governor.execute(proposalIdToVeto)).to.emit(governor, "ProposalExecuted");
 
-        console.log("HERE2")
-
-
-
+        console.log("HERE2");
     })
 
 }
