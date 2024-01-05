@@ -3,11 +3,25 @@ import { ethers } from "hardhat";
 import { expect } from "chai";
 import {
     BigNumberish,
+    BytesLike,
     EventLog,
 } from "ethers";
 import { mine } from "@nomicfoundation/hardhat-network-helpers";
 import hre from "hardhat";
 
+
+function genOperationBatch(targets:string[], values:any[], payloads:string[], predecessor:string, salt:string) {
+    const encodedValue = ethers.AbiCoder.defaultAbiCoder().encode(
+        ['address[]', 'uint256[]', 'bytes[]', 'uint256', 'bytes32'],
+        [targets, values, payloads, predecessor, salt],
+    )
+        console.log("encodedValue",encodedValue)
+    const id = ethers.keccak256(
+        ethers.hexlify(encodedValue)
+    );
+
+    return { id, targets, values, payloads, predecessor, salt };
+}
 
 export async function shouldBehaveLikeGovernor(): Promise<void> {
 
@@ -428,18 +442,87 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
 
         // Get the proposalId from the event arguments
         const proposalId = logDescription?.args["proposalId"]
-        const proposalIdString = BigInt(proposalId).toString()
+        // const proposalIdString = BigInt(proposalId).toString()
 
         // check proposal state
         let proposalState = await governorNFT.state(proposalId);
         expect(proposalState).to.be.equal(0);
 
+
+        console.log("proposalID",proposalId)
+
+        const details = await governorNFT.proposalDetails(proposalId);
+        console.log("details",{
+            targets: details[0],
+            values: details[1],
+            calldatas: details[2],
+            descriptionHash: details[3],
+        })
+        /*
+            details {
+                targets: Result(1) [ '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9' ],
+                values: Result(1) [ 0n ],
+                calldatas: Result(1) [
+                    '0x40c10f1900000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c80000000000000000000000000000000000000000000000000000000000002710'
+                ],
+                descriptionHash: '0xcb25548cdf916d223de19fc110d28ff793bc1a3eb1835d9a706165531065a56c'
+            }
+        */
+
+        const targets: string[] = [];
+        const values: bigint[] = [];
+        const payloads: string[] = [];
+
+        details[0].forEach((target: string) => {
+            targets.push(target);
+        });
+
+        details[1].forEach((value: bigint) => {
+            if (value === 0n) {
+                values.push(0n);
+            }
+            values.push(value);
+        });
+
+
+        details[2].forEach((payload: string) => {
+            payloads.push(payload);
+        });
+
+        const timelockIdHash = genOperationBatch(
+            targets,
+            values,
+            payloads,
+            ethers.ZeroHash,
+            details[3]
+        ).id;
+
+
+        console.log("timelockIdHash",timelockIdHash)
+
+        const timelockIdHashFromContract = await timelock.hashOperationBatch(
+            targets,
+            values,
+            payloads,
+            ethers.ZeroHash,
+            details[3]
+        );
+        console.log("timelockIdHashFromContract",timelockIdHashFromContract)
+
+        // 0xfe9fe86790e61e8948f4f0deb4ca596f9c870a489fe5d3335e0cd26ab6d3fbd7
+        // const encodedProposalIdHash = ethers.encodeBytes32String('0x'+proposalIdHashFromContract.toString());
+        //Error: bytes32 string must be less than 32 bytes
+        // console.log("encoded proposalIdHash",encodedProposalIdHash)
+
+        // Can you console log the proposal state?
+        // convert bigint to bytes32 like
+
         // governor will create proposal to veto the proposalId
         // this targets timelock to cancel the proposal
         const vetoTx = await governor.propose(
-            [await governor.getAddress()], // targets 
+            [await timelock.getAddress()], // targets 
             [0n], // value
-            [timelock.interface.encodeFunctionData("cancel", [ethers.encodeBytes32String(proposalId)])],
+            [timelock.interface.encodeFunctionData("cancel", [timelockIdHash])],
             "Proposal to veto the proposalId"// description
         );
 
@@ -544,12 +627,11 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
         await mine(100);
 
         console.log("governor nft timelock",{g:await governorNFT.timelock(), t:await timelock.getAddress()})
-        console.log("loging isOperation",await timelock.getOperationState(ethers.encodeBytes32String(proposalId)))
+        console.log("get Operation state",await timelock.getOperationState(timelockIdHash))
+        console.log("isOperation",await timelock.isOperation(timelockIdHash))
 
-        console.log("proposalID",proposalId)
+        // 0
 
-        // const details = await governorNFT.proposalDetails(proposalId);
-        // console.log("details",details)
 
         // // const something = await governorNFT.hashProposal(
         // //     details[0],
@@ -583,6 +665,11 @@ export async function shouldBehaveLikeGovernor(): Promise<void> {
 
         // here it is complaining that the state is 3 Defeated
         await expect(governor.execute(proposalIdToVeto)).to.emit(governor, "ProposalExecuted");
+        // Error: VM Exception while processing transaction: reverted with custom error 
+        // 'TimelockUnexpectedOperationState(
+            // "0xfe9fe86790e61e8948f4f0deb4ca596f9c870a489fe5d3335e0cd26ab6d3fbd7", 
+            // "0x0000000000000000000000000000000000000000000000000000000000000006"
+        //)'
 
         console.log("HERE2");
     })
