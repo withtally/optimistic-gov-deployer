@@ -1,6 +1,3 @@
-Certainly! I'll adjust the formatting to use Markdown headers for titles and subtitles. Here's the revised README:
-
----
 
 # 🌐 Optimistic Governance: Empowering Faster DAOs with Tally
 
