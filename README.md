@@ -1,7 +1,6 @@
 
 # 🌐 Optimistic Governance: Empowering Faster DAOs with Tally
 
-**Theme Image for Repository: resources/banner.png**
 
 ## 🚀 Streamline Your DAO with Optimistic Governance
 
