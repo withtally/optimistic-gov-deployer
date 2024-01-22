@@ -8,6 +8,7 @@ export const config:any = {
   nft: {
     name: "Optimistic Yacht Club",
     symbol: "OYC",
+    baseTokenURI: "https:///", // you have to add your baseTokenURI.
   },
   // Timelock
   timelock: {

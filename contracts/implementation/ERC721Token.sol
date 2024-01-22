@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 
 /**
@@ -15,27 +15,50 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
  * @dev This contract is an implementation of an ERC721 token with additional features such as pausing, minting, burning, and voting.
  * It inherits from various OpenZeppelin ERC721 extension contracts and uses AccessControl for role-based access control.
  * This Contract uses Initializable and will use initialize and a proxy clone minimal EIP
+ *    
  */
-contract ERC721Token is Initializable, ERC721Upgradeable, ERC721Enumerable, ERC721URIStorage, ERC721Pausable, AccessControl, ERC721Burnable, EIP712Upgradeable, ERC721Votes {
-    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    uint256 private _nextTokenId;
+contract ERC721Token is Initializable,
+    ERC721Upgradeable,
+    ERC721EnumerableUpgradeable,
+    EIP712Upgradeable,
+    ERC721URIStorageUpgradeable,
+    ERC721Pausable,
+    AccessControl,
+    ERC721Burnable,
+    ERC721Votes 
+{
 
+    /**
+     * @dev Initializes the ERC721Token contract.
+     * @param name The name of the token.
+     * @param symbol The symbol of the token.
+     * @param defaultAdmin The default admin role holder.
+     * @param pauser The address with the pauser role.
+     * @param minter The address with the minter role.
+     */
     function initialize(
         string memory name,
         string memory symbol,
+        string memory baseTokenURI,
         address defaultAdmin,
         address pauser,
         address minter
         )
     public virtual initializer {
-
         __EIP712_init(name, "1");
         __ERC721_init(name, symbol);
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(PAUSER_ROLE, pauser);
         _grantRole(MINTER_ROLE, minter);
+                _baseTokenURI = baseTokenURI;
+
     }
+
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    uint256 private _nextTokenId;
+    string private _baseTokenURI;
+
 
     /**
      * @dev Returns the base URI for token metadata.
@@ -74,6 +97,18 @@ contract ERC721Token is Initializable, ERC721Upgradeable, ERC721Enumerable, ERC7
     }
 
     // The following functions are overrides required by Solidity.
+
+    function _EIP712Name() internal pure override returns (string memory) {
+        return super._EIP712Name();
+    }
+
+    function _EIP712Version() internal pure override returns (string memory) {
+        return super._EIP712Version();
+    }
+
+    function _approve(address to, uint256 tokenId, address auth) internal {
+        return super._approve(to, tokenId, auth, true);
+    }
 
     function _update(address to, uint256 tokenId, address auth)
         internal

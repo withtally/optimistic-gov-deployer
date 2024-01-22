@@ -19,16 +19,20 @@ contract ERC721Token is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausab
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
+    string private _baseTokenURI;
 
     constructor(
         string memory name,
         string memory symbol,
+        string memory baseTokenURI,
         address defaultAdmin,
         address pauser,
-        address minter)
+        address minter
+        )
         ERC721(name, symbol)
         EIP712(name, "1")
     {
+        _baseTokenURI = baseTokenURI;
         _grantRole(DEFAULT_ADMIN_ROLE, defaultAdmin);
         _grantRole(PAUSER_ROLE, pauser);
         _grantRole(MINTER_ROLE, minter);
@@ -38,8 +42,8 @@ contract ERC721Token is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausab
      * @dev Returns the base URI for token metadata.
      * @return The base URI string.
      */
-    function _baseURI() internal pure override returns (string memory) {
-        return "http:///";
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
     }
 
     /**

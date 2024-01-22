@@ -253,6 +253,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 		const args = [
 			config.nft.name,
 			config.nft.symbol,
+			config.nft.baseTokenURI,
 			// Admin Address is pointing to the governance contract
 			minterNFT,
 			minterNFT,
