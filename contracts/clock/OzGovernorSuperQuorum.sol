@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
-import "tally-superquorum/contracts/extension/GovernorVotesSuperQuorumFraction.sol";
+import "@tallyxyz/super-quorum/contracts/extension/GovernorVotesSuperQuorumFraction.sol";
 
 /**
  * @title OzGovernorSuperQuorum
@@ -35,7 +35,7 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
         string memory _name, IVotes _token, TimelockController _timelock,
         uint48 _initialVotingDelay, uint32 _initialVotingPeriod, uint256 _initialProposalThreshold,
         uint256 _quorumNumeratorValue,   
-        uint256 _superQuorumThreshold,     
+        uint32 _superQuorumThreshold,     
         uint48 _initialVoteExtension
     )
         Governor(_name)

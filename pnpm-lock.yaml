@@ -26,6 +26,9 @@ devDependencies:
   '@openzeppelin/contracts-upgradeable':
     specifier: 5.0.0
     version: 5.0.0(@openzeppelin/contracts@5.0.0)
+  '@tallyxyz/super-quorum':
+    specifier: 1.0.3
+    version: 1.0.3
   '@typechain/ethers-v6':
     specifier: ^0.4.0
     version: 0.4.3(ethers@6.9.0)(typechain@8.3.2)(typescript@4.9.5)
@@ -98,9 +101,6 @@ devDependencies:
   solidity-coverage:
     specifier: ^0.8.5
     version: 0.8.5(hardhat@2.19.2)
-  tally-superquorum:
-    specifier: 1.0.1
-    version: 1.0.1
   ts-node:
     specifier: ^10.9.1
     version: 10.9.1(@types/node@20.10.4)(typescript@4.9.5)
@@ -1028,10 +1028,6 @@ packages:
     resolution: {integrity: sha512-bv2sdS6LKqVVMLI5+zqnNrNU/CA+6z6CmwFXm/MzmOPBRSO5reEJN7z0Gbzvs0/bv/MZZXNklubpwy3v2+azsw==}
     dev: true
 
-  /@openzeppelin/contracts@5.0.1:
-    resolution: {integrity: sha512-yQJaT5HDp9hYOOp4jTYxMsR02gdFZFXhewX5HW9Jo4fsqSVqqyIO/xTHdWDaKX5a3pv1txmf076Lziz+sO7L1w==}
-    dev: true
-
   /@pkgr/utils@2.4.2:
     resolution: {integrity: sha512-POgTXhjrTfbTV63DiFXav4lBHiICLKKwDeaKn9Nphwj7WH6m0hMMCaJkMyRWjgtPFyRKRVoMXXjczsTQRDEhYw==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -1158,6 +1154,10 @@ packages:
     resolution: {integrity: sha512-PI9NfoA3P8XK2VBkK5oIfRgKDsicwDZfkVq9ZTBCQYGOP1N2owgY2dyLGyU5/J/hQs8KRk55kdmvTLjy3Mu3vg==}
     dependencies:
       antlr4ts: 0.5.0-alpha.4
+    dev: true
+
+  /@tallyxyz/super-quorum@1.0.3:
+    resolution: {integrity: sha512-5r+uDvcPGzsQeL09GKHl79fW+EKhrQRlNQn5J7MbAsrAk9k45pEoTwuib/TSjhYoXoNdnj9CzUTiJa8AJQx2Yg==}
     dev: true
 
   /@tsconfig/node10@1.0.9:
@@ -5330,12 +5330,6 @@ packages:
       slice-ansi: 4.0.0
       string-width: 4.2.3
       strip-ansi: 6.0.1
-    dev: true
-
-  /tally-superquorum@1.0.1:
-    resolution: {integrity: sha512-ezPw0Z3REd+bkl1dcR0z1obW0MmNFWETPtP4eAY7Q1zEsXehkl8gHck/e5ckTMWlQDt4EFes/5fwUK0nh8A2+A==}
-    dependencies:
-      '@openzeppelin/contracts': 5.0.1
     dev: true
 
   /text-table@0.2.0:

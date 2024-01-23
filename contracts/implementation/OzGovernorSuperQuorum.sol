@@ -2,24 +2,34 @@
 pragma solidity ^0.8.20;
 
 // Import OpenZeppelin governance contracts
-import "@openzeppelin/contracts/governance/Governor.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorSettings.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorStorage.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorPreventLateQuorum.sol";
-import "@tallyxyz/super-quorum/contracts/extension/GovernorVotesSuperQuorumFraction.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@tallyxyz/super-quorum/contracts/extension/GovernorVotesSuperQuorumFractionUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/GovernorUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorSettingsUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorCountingSimpleUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorVotesUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorVotesQuorumFractionUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorTimelockControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/governance/extensions/GovernorPreventLateQuorumUpgradeable.sol";
 
 /**
  * @title OzGovernorSuperQuorum
  * @dev OzGovernorSuperQuorum is a smart contract that extends OpenZeppelin's Governor with additional features
  * for voting, timelock, and quorum.
  */
-contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSimple, GovernorStorage, GovernorVotes,GovernorPreventLateQuorum, GovernorVotesQuorumFraction,GovernorVotesSuperQuorumFraction, GovernorTimelockControl {
-    
-/**
+contract OzGovernorSuperQuorum is Initializable,
+    GovernorUpgradeable, 
+    GovernorSettingsUpgradeable,
+    GovernorCountingSimpleUpgradeable,
+    GovernorStorageUpgradeable,
+    GovernorVotesUpgradeable,
+    GovernorPreventLateQuorumUpgradeable,
+    GovernorVotesQuorumFractionUpgradeable,
+    GovernorVotesSuperQuorumFractionUpgradeable,
+    GovernorTimelockControlUpgradeable
+{
+    /**
      * @dev Initializes the OZGovernor contract.
      * @param _name The name of the governor.
      * @param _token The voting token.
@@ -31,22 +41,21 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
      * @param _superQuorumThreshold, minimum number of votes required for super quorum,
      * @param _initialVoteExtension,
      */
-    constructor(
+    function initialize(
         string memory _name, IVotes _token, TimelockController _timelock,
         uint48 _initialVotingDelay, uint32 _initialVotingPeriod, uint256 _initialProposalThreshold,
-        uint256 _quorumNumeratorValue,   
+        uint256 _quorumNumeratorValue,
         uint32 _superQuorumThreshold,     
         uint48 _initialVoteExtension
-    )
-        Governor(_name)
-        GovernorSettings(_initialVotingDelay, _initialVotingPeriod, _initialProposalThreshold)
-        GovernorVotes(_token)
-        GovernorVotesQuorumFraction(_quorumNumeratorValue)
-        GovernorPreventLateQuorum(_initialVoteExtension)
-        GovernorVotesSuperQuorumFraction(_superQuorumThreshold)
-        GovernorTimelockControl(_timelock)
-    {}
-
+    ) public virtual initializer {
+        __Governor_init(_name);
+        __GovernorSettings_init(_initialVotingDelay, _initialVotingPeriod, _initialProposalThreshold);
+        __GovernorVotes_init(_token);
+        __GovernorVotesQuorumFraction_init(_quorumNumeratorValue);
+        __GovernorPreventLateQuorum_init(_initialVoteExtension);
+        __GovernorVotesSuperQuorumFraction_init(_superQuorumThreshold);
+        __GovernorTimelockControl_init(_timelock);
+    }
 
     /**
      * @notice Retrieves the voting delay configured in the settings.
