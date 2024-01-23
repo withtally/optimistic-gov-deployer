@@ -12,13 +12,13 @@ import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**
- * @title ERC721Token
+ * @title ERC721TokenUpgradeable
  * @dev This contract is an implementation of an ERC721 token with additional features such as pausing, minting, burning, and voting.
  * It inherits from various OpenZeppelin ERC721 extension contracts and uses AccessControl for role-based access control.
  * This Contract uses Initializable and will use initialize and a proxy clone minimal EIP
  *    
  */
-contract ERC721Token is Initializable,
+contract ERC721TokenUpgradeable is Initializable,
     ERC721Upgradeable,
     ERC721EnumerableUpgradeable,
     EIP712Upgradeable,
@@ -30,7 +30,7 @@ contract ERC721Token is Initializable,
 {
 
     /**
-     * @dev Initializes the ERC721Token contract.
+     * @dev Initializes the ERC721TokenUpgradeable contract.
      * @param name The name of the token.
      * @param symbol The symbol of the token.
      * @param defaultAdmin The default admin role holder.

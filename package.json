@@ -1,5 +1,5 @@
 {
-  "name": "optimistic-gov-deployer",
+  "name": "optimistic-governor",
   "version": "1.0.0",
   "description": "\"A package to help deploy Open Zeppelin Governance and Tokens following Tally pattern.\"",
   "scripts": {

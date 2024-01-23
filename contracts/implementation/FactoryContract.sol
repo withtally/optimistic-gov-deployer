@@ -14,6 +14,7 @@ contract FactoryClone {
     address[] public tokens;
 
     constructor() public {
+        // receive address
         tokenImplementation = address(new ERC20Token());
         // timelockImplementation = address(new TimelockController());
         // OzGovernorSuperQuorum = address(new OzGovernorSuperQuorum());

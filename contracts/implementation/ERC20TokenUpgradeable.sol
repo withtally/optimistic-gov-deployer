@@ -11,18 +11,25 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20Pausable
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**
- * @title ERC20Token
- * @dev ERC20Token is an ERC20 token with additional features such as burning, pausing, and minting,
+ * @title ERC20TokenUpgradeable
+ * @dev ERC20TokenUpgradeable is an ERC20 token with additional features such as burning, pausing, and minting,
  * along with AccessControl and Permit functionalities.
  * This Contract uses Initializable and will use initialize and a proxy clone minimal EIP
  */
-contract ERC20Token is Initializable,ERC20Upgradeable, ERC20BurnableUpgradeable, ERC20PausableUpgradeable, AccessControlUpgradeable, ERC20PermitUpgradeable, ERC20VotesUpgradeable {
+contract ERC20TokenUpgradeable is Initializable,
+    ERC20Upgradeable,
+    ERC20BurnableUpgradeable,
+    ERC20PausableUpgradeable,
+    AccessControlUpgradeable,
+    ERC20PermitUpgradeable,
+    ERC20VotesUpgradeable
+{
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     /**
-     * @dev Initializes the ERC20Token contract.
+     * @dev Initializes the ERC20TokenUpgradeable contract.
      * @param _name The name of the token.
      * @param _symbol The symbol of the token.
      * @param defaultAdmin The default admin role holder.
