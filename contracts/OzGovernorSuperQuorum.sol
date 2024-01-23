@@ -118,9 +118,9 @@ contract OzGovernorSuperQuorum is Governor, GovernorSettings, GovernorCountingSi
                 return ProposalState.Queued;
             }
             return ProposalState.Succeeded;
-        } else {
-            return proposalState;
         }
+
+        return proposalState;
     }
 
     /**

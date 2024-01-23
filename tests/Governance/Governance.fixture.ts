@@ -63,6 +63,7 @@ export async function deployGovernanceContractsFixture(): Promise<{
     const nft = await NFT.connect(deployerSigner).deploy(
         config.nft.name,
         config.nft.symbol,
+        config.nft.baseTokenURI,
         deployerSigner.address,
         deployerSigner.address,
         deployerSigner.address,
@@ -141,6 +142,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const nft = await NFT.connect(deployerSigner).deploy(
         config.nft.name,
         config.nft.symbol,
+        config.nft.baseTokenURI,
         deployerSigner.address,
         deployerSigner.address,
         deployerSigner.address,
