@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@tallyxyz/super-quorum/contracts/SuperQuorumGov.sol";
+import "../OzGovernorSuperQuorum.sol";
 
 /**
- * @title OzGovernorSuperQuorum
- * @dev OzGovernorSuperQuorum is a smart contract that extends OpenZeppelin's Governor with additional features
+ * @title OzGovernorSuperQuorumClock
+ * @dev OzGovernorSuperQuorumClock is a smart contract that extends OpenZeppelin's Governor with additional features
  * for voting, timelock, and quorum.
  */    
-contract OzGovernorSuperQuorum is SuperQuorumGov {
+contract OzGovernorSuperQuorumClock is OzGovernorSuperQuorum {
     /**
      * @dev Initializes the OZGovernor contract.
      * @param _name The name of the governor.
@@ -28,7 +28,7 @@ contract OzGovernorSuperQuorum is SuperQuorumGov {
         uint32 _superQuorumThreshold,     
         uint48 _initialVoteExtension
     )
-    SuperQuorumGov(
+    OzGovernorSuperQuorum(
         _name, _token, _timelock,
         _initialVotingDelay, _initialVotingPeriod, _initialProposalThreshold,
         _quorumNumeratorValue, _superQuorumThreshold, _initialVoteExtension

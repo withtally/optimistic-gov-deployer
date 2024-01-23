@@ -21,6 +21,15 @@ contract ERC721Token is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Pausab
     uint256 private _nextTokenId;
     string private _baseTokenURI;
 
+    /**
+     * @dev Initializes the ERC20Token contract.
+     * @param name The name of the token.
+     * @param symbol The symbol of the token.
+     * @param baseTokenURI The base URI for the token metadata.
+     * @param defaultAdmin The default admin role holder.
+     * @param pauser The address with the pauser role.
+     * @param minter The address with the minter role.
+     */
     constructor(
         string memory name,
         string memory symbol,
