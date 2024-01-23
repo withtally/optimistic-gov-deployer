@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.20;
 
 import "./ERC20Token.sol";
 import "./ERC721Token.sol";
@@ -22,19 +22,21 @@ contract FactoryClone {
     function createToken(
         string calldata name, 
         string calldata symbol, 
-        uint256 initialSupply
+        address defaultAdmin,
+        address pauser,
+        address minter
     ) external returns (
-        address,
-        address,
         address
+        // address,
+        // address
     ) {
 
         // Creating Token
         address clone = Clones.clone(tokenImplementation);
-        ERC20Token(clone).initialize(name, symbol, initialSupply, msg.sender);
+        ERC20Token(clone).initialize(name, symbol, defaultAdmin, pauser, minter);
         tokens.push(clone);
 
-        return clone,clone,clone;
+        // return [clone,clone,clone];
     }
 
 

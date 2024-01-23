@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Pausable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Votes.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721PausableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721VotesUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/cryptography/EIP712Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
@@ -23,10 +23,10 @@ contract ERC721Token is Initializable,
     ERC721EnumerableUpgradeable,
     EIP712Upgradeable,
     ERC721URIStorageUpgradeable,
-    ERC721Pausable,
-    AccessControl,
-    ERC721Burnable,
-    ERC721Votes 
+    ERC721PausableUpgradeable,
+    AccessControlUpgradeable,
+    ERC721BurnableUpgradeable,
+    ERC721VotesUpgradeable 
 {
 
     /**
@@ -97,23 +97,10 @@ contract ERC721Token is Initializable,
         _setTokenURI(tokenId, uri);
     }
 
-    // The following functions are overrides required by Solidity.
-
-    function _EIP712Name() internal pure override returns (string memory) {
-        return super._EIP712Name();
-    }
-
-    function _EIP712Version() internal pure override returns (string memory) {
-        return super._EIP712Version();
-    }
-
-    function _approve(address to, uint256 tokenId, address auth) internal {
-        return super._approve(to, tokenId, auth, true);
-    }
 
     function _update(address to, uint256 tokenId, address auth)
         internal
-        override(ERC721Upgradeable, ERC721Enumerable, ERC721Pausable, ERC721Votes)
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721PausableUpgradeable, ERC721VotesUpgradeable)
         returns (address)
     {
         return super._update(to, tokenId, auth);
@@ -121,7 +108,7 @@ contract ERC721Token is Initializable,
 
     function _increaseBalance(address account, uint128 value)
         internal
-        override(ERC721Upgradeable, ERC721Enumerable, ERC721Votes)
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721VotesUpgradeable)
     {
         super._increaseBalance(account, value);
     }
@@ -129,7 +116,7 @@ contract ERC721Token is Initializable,
     function tokenURI(uint256 tokenId)
         public
         view
-        override(ERC721Upgradeable, ERC721URIStorage)
+        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
         returns (string memory)
     {
         return super.tokenURI(tokenId);
@@ -138,7 +125,7 @@ contract ERC721Token is Initializable,
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721Upgradeable, ERC721Enumerable, ERC721URIStorage, AccessControl)
+        override(ERC721Upgradeable, ERC721EnumerableUpgradeable, ERC721URIStorageUpgradeable, AccessControlUpgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);

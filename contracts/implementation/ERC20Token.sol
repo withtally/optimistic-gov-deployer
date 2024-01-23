@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
+
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 /**
@@ -15,7 +16,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
  * along with AccessControl and Permit functionalities.
  * This Contract uses Initializable and will use initialize and a proxy clone minimal EIP
  */
-contract ERC20Token is Initializable,ERC20Upgradeable, ERC20Burnable, ERC20Pausable, AccessControl, ERC20PermitUpgradeable, ERC20Votes {
+contract ERC20Token is Initializable,ERC20Upgradeable, ERC20BurnableUpgradeable, ERC20PausableUpgradeable, AccessControlUpgradeable, ERC20PermitUpgradeable, ERC20VotesUpgradeable {
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -84,7 +85,7 @@ contract ERC20Token is Initializable,ERC20Upgradeable, ERC20Burnable, ERC20Pausa
      */
     function _update(address from, address to, uint256 value)
         internal
-        override(ERC20, ERC20Pausable, ERC20Votes)
+        override(ERC20Upgradeable, ERC20PausableUpgradeable, ERC20VotesUpgradeable)
     {
         super._update(from, to, value);
     }
@@ -97,9 +98,10 @@ contract ERC20Token is Initializable,ERC20Upgradeable, ERC20Burnable, ERC20Pausa
     function nonces(address owner)
         public
         view
-        override(ERC20Permit, Nonces)
+        override(ERC20PermitUpgradeable,NoncesUpgradeable)
         returns (uint256)
     {
         return super.nonces(owner);
     }
+
 }

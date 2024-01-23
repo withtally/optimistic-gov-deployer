@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type * as clock from "./clock";
 export type { clock };
+import type * as implementation from "./implementation";
+export type { implementation };
 export type { ERC20Token } from "./ERC20Token";
 export type { ERC721Token } from "./ERC721Token";
 export type { OZGovernor } from "./OZGovernor";

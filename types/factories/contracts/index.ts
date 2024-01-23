@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as clock from "./clock";
+export * as implementation from "./implementation";
 export { ERC20Token__factory } from "./ERC20Token__factory";
 export { ERC721Token__factory } from "./ERC721Token__factory";
 export { OZGovernor__factory } from "./OZGovernor__factory";
