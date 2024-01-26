@@ -105,7 +105,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     const admin_address = governance_address;
 
     // TOKEN CONTRACT
-    const GovernorToken = (await ethers.getContractFactory("contracts/clock/ERC20Token.sol:ERC20Token")) as ERC20Token__factory
+    const GovernorToken = (await ethers.getContractFactory("ERC20TokenClock")) as ERC20Token__factory
     const token = await GovernorToken.connect(deployerSigner).deploy(
         config.token.name,
         config.token.symbol,
@@ -124,7 +124,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     );
 
     // VETO GOVERNOR CONTRACT
-    const OzGovernorSuperQuorum = (await ethers.getContractFactory("contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const OzGovernorSuperQuorum = (await ethers.getContractFactory("OzGovernorSuperQuorumClock")) as OzGovernorSuperQuorum__factory
     const governor = await OzGovernorSuperQuorum.connect(deployerSigner).deploy(
         config.vetoGovernor.name,
         token_address,
@@ -138,7 +138,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     );
 
     // NFT CONTRACT
-    const NFT = (await ethers.getContractFactory("contracts/clock/ERC721Token.sol:ERC721Token")) as ERC721Token__factory
+    const NFT = (await ethers.getContractFactory("ERC721TokenClock")) as ERC721Token__factory
     const nft = await NFT.connect(deployerSigner).deploy(
         config.nft.name,
         config.nft.symbol,
@@ -149,7 +149,7 @@ export async function deployGovernanceContractsClockTimestampFixture(): Promise<
     );
 
     // NFT GOVERNOR CONTRACT
-    const OzGovernorSuperQuorum2 = (await ethers.getContractFactory("contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum")) as OzGovernorSuperQuorum__factory
+    const OzGovernorSuperQuorum2 = (await ethers.getContractFactory("OzGovernorSuperQuorumClock")) as OzGovernorSuperQuorum__factory
     const governorNFT = await OzGovernorSuperQuorum2.connect(deployerSigner).deploy(
         config.governor.name,
         token_address,

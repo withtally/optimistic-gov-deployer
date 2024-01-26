@@ -76,9 +76,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-		token = await deploy("ERC20Token", {
+		token = await deploy(
+			config.clockMode ? "ERC20TokenClock" : "ERC20Token", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/ERC20Token.sol:ERC20Token" : "contracts/ERC20Token.sol:ERC20Token",
 			args: args,
 			log: true,
 		});
@@ -204,13 +204,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.vetoGovernor.quorumNumerator,
 			config.vetoGovernor.superQuorumThreshold,
 			config.vetoGovernor.voteExtension
-
 		]
 		const gasLimit = 5000000; // Example gas limit, adjust as needed
-
-		governor = await deploy("OzGovernorSuperQuorum", {
+		governor = await deploy(config.clockMode ?  "OzGovernorSuperQuorumClock": "OzGovernorSuperQuorum", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum" : "contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum",
 			args: args,
 			log: false,
 			gasLimit: gasLimit, // Adding the gasLimit here
@@ -269,9 +266,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			address pauser,
 			address minter
 		*/
-		nft = await deploy("ERC721Token", {
+		nft = await deploy(
+			config.clockMode ? "ERC721TokenClock" : "ERC721Token", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/ERC721Token.sol:ERC721Token" : "contracts/ERC721Token.sol:ERC721Token",
 			args: args,
 			log: true,
 		});
@@ -335,9 +332,9 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 			config.governor.voteExtension
 
 		]
-		governor = await deploy("OzGovernorSuperQuorum", {
+		governor = await deploy(
+			config.clockMode ? "OzGovernorSuperQuorumClock": "OzGovernorSuperQuorum", {
 			from: deployer,
-			contract: config.clockMode ? "contracts/clock/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum" : "contracts/OzGovernorSuperQuorum.sol:OzGovernorSuperQuorum",
 			args: args,
 			log: true,
 		});

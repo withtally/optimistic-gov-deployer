@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.20;
 
-import "./ERC20Token.sol";
-import "./ERC721Token.sol";
+import "./ERC20TokenUpgradeable.sol";
+import "./ERC721TokenUpgradeable.sol";
 import "./TimelockController.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 
