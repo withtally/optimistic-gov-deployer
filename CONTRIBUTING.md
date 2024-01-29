@@ -20,9 +20,7 @@ git clone https://github.com/YOUR-USERNAME/token-distributor-deployer.git
 2. Install dependencies   
 
 ```
-yarn
-# or 
-npm install
+pnpm install
 ```
 
 3. Create a branch for your edits
