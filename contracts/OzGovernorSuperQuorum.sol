@@ -29,7 +29,7 @@ contract OzGovernorSuperQuorum is SuperQuorumGovernor {
         uint32 _superQuorumThreshold,     
         uint48 _initialVoteExtension
     )
-    SuperQuorumGov(
+    SuperQuorumGovernor(
         _name, _token, _timelock,
         _initialVotingDelay, _initialVotingPeriod, _initialProposalThreshold,
         _quorumNumeratorValue, _superQuorumThreshold, _initialVoteExtension
